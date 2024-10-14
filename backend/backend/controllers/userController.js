@@ -73,7 +73,7 @@ const registerUser = asyncHandler(async (req, res) => {
      # Access: PUBLIC
     */
 
-  const { name, email, password, plate, telephone } = req.body;
+  const { name, email, password, plate, telephone, parking } = req.body;
 
   // Check if user already exist
   const userExists = await User.findOne({ email });
@@ -91,6 +91,7 @@ const registerUser = asyncHandler(async (req, res) => {
     password: password,
     plate: plate,
     telephone: telephone,
+    parking: 0
   });
 
   if (user) {

@@ -30,6 +30,10 @@ const userSchema = mongoose.Schema({
     telephone: {
         type: Number,
         required: true,
+    },
+    parking: {
+        type: Number,
+        required: true,
     }
 
 },{

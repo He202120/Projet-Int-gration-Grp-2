@@ -5,6 +5,8 @@ import { useBlockUserMutation, useUnblockUserMutation, useUpdateUserByAdminMutat
 
 const UsersDataTable = ({ users }) => {
 
+  console.log("Users data:", users);
+
   const [searchQuery, setSearchQuery] = useState("");
 
   const [showBlockingConfirmation, setShowBlockingConfirmation] = useState(false);
@@ -15,13 +17,15 @@ const UsersDataTable = ({ users }) => {
   const [userIdToUnblock, setUserIdToUnblock] = useState(null);
   const [userNameToUnblock, setUserNametoUnblock] = useState(null);
   const [userMailToUnblock, setUserMailtoUnblock] = useState(null);
-  const [userPlateToUnblock, setUserPlatetoUnblock] = useState(null);
+  const [userPlateToUnblock, setUserPlateToUnblock] = useState(null);
+  const [userParkingToUnblock, setUserParkingToUnblock] = useState(null);
 
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [userIdToUpdate, setUserIdToUpdate] = useState("");
   const [userNameToUpdate, setUserNameToUpdate] = useState("");
   const [userEmailToUpdate, setUserEmailToUpdate] = useState("");
-  const [userPlateToUpdate, setUserPlatetoUpdate] = useState("");
+  const [userPlateToUpdate, setUserPlateToUpdate] = useState("");
+  const [userParkingToUpdate, setUserParkingToUpdate] = useState("");
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
@@ -52,7 +56,7 @@ const UsersDataTable = ({ users }) => {
 
   const handleUnblock = async () => {
     try {
-      const responseFromApiCall = await unblockUser({ userId: userIdToUnblock, name: userNameToUnblock, plate: userPlateToUnblock, email: userMailToUnblock });
+      const responseFromApiCall = await unblockUser({ userId: userIdToUnblock, name: userNameToUnblock, plate: userPlateToUnblock, email: userMailToUnblock, parking: userParkingToUnblock });
       toast.success("User Accepted Successfully.");
       setUserIdToUnblock(null);
       setShowUnblockingConfirmation(false);
@@ -66,7 +70,8 @@ const UsersDataTable = ({ users }) => {
     setUserIdToUpdate(user._id);
     setUserNameToUpdate(user.name);
     setUserEmailToUpdate(user.email);
-    setUserPlatetoUpdate(user.plate);
+    setUserPlateToUpdate(user.plate);
+    setUserParkingToUpdate(user.parking);
     setShowUpdateModal(true);
   };
 
@@ -76,7 +81,8 @@ const UsersDataTable = ({ users }) => {
         userId: userIdToUpdate,
         name: userNameToUpdate,
         email: userEmailToUpdate,
-        plate : userPlateToUpdate
+        plate : userPlateToUpdate,
+        parking: userParkingToUpdate
       });
       toast.success("User Updated Successfully.");
       setUserIdToUpdate(null);
@@ -99,7 +105,8 @@ const UsersDataTable = ({ users }) => {
             <th>Status</th>
             <th>Update</th>
             <th>Delete</th>
-            <th>Accept Player</th>
+            <th>Accept User</th>
+            <th>Parking now</th>
           </tr>
         </thead>
         <tbody>
@@ -143,7 +150,8 @@ const UsersDataTable = ({ users }) => {
                       setUserIdToUnblock(user._id);
                       setUserNametoUnblock(user.name);
                       setUserMailtoUnblock(user.email);
-                      setUserPlatetoUnblock(user.plate);
+                      setUserPlateToUnblock(user.plate);
+                      setUserParkingToUnblock(user.parking);
                       setShowUnblockingConfirmation(true);
                     }}
                   >
@@ -151,6 +159,7 @@ const UsersDataTable = ({ users }) => {
                   </Button>
                 )}
               </td>
+              <td>{user.parking}</td>
             </tr>
           ))}
         </tbody>
