@@ -23,9 +23,8 @@ const userSchema = mongoose.Schema({
     profileImageName: {
         type: String
     },
-    position: {
+    plate: {
         type: String,
-        enum: ['attacker', 'defender', 'keeper', 'middle'],
         required: true,
     },
     telephone: {

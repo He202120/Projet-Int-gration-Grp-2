@@ -251,7 +251,7 @@ const unBlockUser = asyncHandler(async (req, res) => {
   const userId = req.body.userId;
   const name = req.body.name;
   const email = req.body.email;
-  const position = req.body.position
+  const plate = req.body.plate
 
   if (!userId) {
     throw new BadRequestError("UserId not received in request - User Un-blocking failed.");
@@ -262,7 +262,7 @@ const unBlockUser = asyncHandler(async (req, res) => {
   const responseMessage = userUnblockingProcess.message;
 
   if (userUnblockingProcess.success) {
-    await sendMail(email, name, position, true);
+    await sendMail(email, name, plate, true);
     res.status(201).json({ message: responseMessage });
 
   } else {

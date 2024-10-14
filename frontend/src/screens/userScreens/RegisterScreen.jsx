@@ -18,7 +18,7 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [telephone, setTelephone] = useState("");
-  const [position, setPosition] = useState("");
+  const [plate, setPlate] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -45,7 +45,7 @@ const RegisterScreen = () => {
           email,
           password,
           telephone,
-          position
+          plate
         }).unwrap();
         // Charlier Martin
         //dispatch(setCredentials({ ...responseFromApiCall }));
@@ -112,18 +112,14 @@ const RegisterScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Form.Group className="my-2" controlId="position">
-          <Form.Label>Position</Form.Label>
-          <Form.Select
-            value={position}
-            onChange={(e) => setPosition(e.target.value)}
-          >
-            <option value="">Select Position</option>
-            <option value="attacker">Attacker</option>
-            <option value="defender">Defender</option>
-            <option value="keeper">Keeper</option>
-            <option value="middle">Middle</option>
-          </Form.Select>
+        <Form.Group className="my-2" controlId="plate">
+          <Form.Label>plate</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="0-XXX-000"
+            value={plate}
+            onChange={(e) => setPlate(e.target.value)}
+          ></Form.Control>
         </Form.Group>
         
 

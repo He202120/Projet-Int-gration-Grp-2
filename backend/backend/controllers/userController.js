@@ -73,7 +73,7 @@ const registerUser = asyncHandler(async (req, res) => {
      # Access: PUBLIC
     */
 
-  const { name, email, password, position, telephone } = req.body;
+  const { name, email, password, plate, telephone } = req.body;
 
   // Check if user already exist
   const userExists = await User.findOne({ email });
@@ -89,7 +89,7 @@ const registerUser = asyncHandler(async (req, res) => {
     name: name,
     email: email,
     password: password,
-    position: position,
+    plate: plate,
     telephone: telephone,
   });
 
@@ -107,7 +107,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     res.status(201).json(registeredUserData);
 
-    await sendMail(user.email, user.name, user.position);
+    await sendMail(user.email, user.name, user.plate);
   
 
   } else {

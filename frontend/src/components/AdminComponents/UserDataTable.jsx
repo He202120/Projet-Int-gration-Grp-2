@@ -15,12 +15,13 @@ const UsersDataTable = ({ users }) => {
   const [userIdToUnblock, setUserIdToUnblock] = useState(null);
   const [userNameToUnblock, setUserNametoUnblock] = useState(null);
   const [userMailToUnblock, setUserMailtoUnblock] = useState(null);
-  const [userPositionToUnblock, setUserPositiontoUnblock] = useState(null);
+  const [userPlateToUnblock, setUserPlatetoUnblock] = useState(null);
 
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [userIdToUpdate, setUserIdToUpdate] = useState("");
   const [userNameToUpdate, setUserNameToUpdate] = useState("");
   const [userEmailToUpdate, setUserEmailToUpdate] = useState("");
+  const [userPlateToUpdate, setUserPlatetoUpdate] = useState("");
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
@@ -51,7 +52,7 @@ const UsersDataTable = ({ users }) => {
 
   const handleUnblock = async () => {
     try {
-      const responseFromApiCall = await unblockUser({ userId: userIdToUnblock, name: userNameToUnblock, position: userPositionToUnblock, email: userMailToUnblock });
+      const responseFromApiCall = await unblockUser({ userId: userIdToUnblock, name: userNameToUnblock, plate: userPlateToUnblock, email: userMailToUnblock });
       toast.success("User Accepted Successfully.");
       setUserIdToUnblock(null);
       setShowUnblockingConfirmation(false);
@@ -65,6 +66,7 @@ const UsersDataTable = ({ users }) => {
     setUserIdToUpdate(user._id);
     setUserNameToUpdate(user.name);
     setUserEmailToUpdate(user.email);
+    setUserPlatetoUpdate(user.plate);
     setShowUpdateModal(true);
   };
 
@@ -73,7 +75,8 @@ const UsersDataTable = ({ users }) => {
       const responseFromApiCall = await updateUserByAdmin({
         userId: userIdToUpdate,
         name: userNameToUpdate,
-        email: userEmailToUpdate
+        email: userEmailToUpdate,
+        plate : userPlateToUpdate
       });
       toast.success("User Updated Successfully.");
       setUserIdToUpdate(null);
@@ -92,6 +95,7 @@ const UsersDataTable = ({ users }) => {
             <th>#</th>
             <th>Name</th>
             <th>Email</th>
+            <th>Plate</th>
             <th>Status</th>
             <th>Update</th>
             <th>Delete</th>
@@ -104,6 +108,7 @@ const UsersDataTable = ({ users }) => {
               <td>{index + 1}</td>
               <td>{user.name}</td>
               <td>{user.email}</td>
+              <td>{user.plate}</td>
               <td>{user.blocked ? "☒" : "☑"}</td>
               <td>
                 <Button
@@ -138,7 +143,7 @@ const UsersDataTable = ({ users }) => {
                       setUserIdToUnblock(user._id);
                       setUserNametoUnblock(user.name);
                       setUserMailtoUnblock(user.email);
-                      setUserPositiontoUnblock(user.position);
+                      setUserPlatetoUnblock(user.plate);
                       setShowUnblockingConfirmation(true);
                     }}
                   >

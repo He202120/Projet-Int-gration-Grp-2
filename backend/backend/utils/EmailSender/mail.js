@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 
 
-const sendMail = async (email, name , position, testClub=false) => {
+const sendMail = async (email, name , plate, testClub=false) => {
     
     const textes = `
     Dear ${name},
@@ -10,7 +10,7 @@ const sendMail = async (email, name , position, testClub=false) => {
 
     Registration Details:
     - Name: ${name}
-    - Position: ${position}
+    - Plate: ${plate}
 
     As a member of the Wetteren Football Club, you will have the opportunity to participate in training sessions, matches, and club events. Here are some important details for you to note:
 
@@ -40,7 +40,7 @@ const sendMail = async (email, name , position, testClub=false) => {
     Best regards,
 
     ${name}
-    ${position}
+    ${plate}
     Wetteren Football Club
     WetterenManager@gmail.com
     0439 52 66 41

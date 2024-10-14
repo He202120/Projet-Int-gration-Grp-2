@@ -14,10 +14,10 @@ const userSignUpDataValidation = [
     .notEmpty()
     .isNumeric()
     .withMessage("A telephone number must be provided."),
-  body("position")
+  body("plate")
     .trim()
     .notEmpty()
-    .withMessage("A position must be provided."),
+    .withMessage("A plate must be provided."),
 ];
 
 const userSignInDataValidation = [
