@@ -18,6 +18,7 @@ import HomeScreen from "./screens/userScreens/HomeScreen.jsx";
 import LoginScreen from "./screens/userScreens/LoginScreen.jsx";
 import RegisterScreen from "./screens/userScreens/RegisterScreen.jsx";
 import ProfileScreen from "./screens/userScreens/ProfileScreen.jsx";
+import ParkingAccess from "./screens/userScreens/ParkingAccess.jsx";
 
 //? ==================================== Admin Screens Import ====================================
 import AdminPrivateRoutes from "./screens/adminScreens/PrivateRoutes.jsx";
@@ -26,8 +27,6 @@ import AdminLoginScreen from "./screens/adminScreens/LoginScreen.jsx";
 import AdminRegisterScreen from "./screens/adminScreens/RegisterScreen.jsx";
 import AdminProfileScreen from "./screens/adminScreens/ProfileScreen.jsx";
 import UsersManagementScreen from "./screens/adminScreens/UsersManagementScreen.jsx";
-import MonitoringScreen from "./screens/adminScreens/MonitoringScreen.jsx"
-
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -43,13 +42,12 @@ const router = createBrowserRouter(
       {/* USER PRIVATE ROUTES */}
       <Route path="" element={<PrivateRoutes />}>
         <Route path="/profile" element={<ProfileScreen />} />
+        <Route path="/parkingAccess" element={<ParkingAccess />} />
       </Route>
 
       {/* ===================================== Admin Routes ===================================== */}
 
       <Route path="/admin" element={<AdminHomeScreen />} />
-
-      <Route path="/monitoring" element={<MonitoringScreen />} />
 
       <Route path="/admin/login" element={<AdminLoginScreen />} />
 
@@ -59,7 +57,6 @@ const router = createBrowserRouter(
       <Route path="" element={<AdminPrivateRoutes />}>
         <Route path="/admin/profile" element={<AdminProfileScreen />} />
         <Route path="/admin/manage-users" element={<UsersManagementScreen />} />
-        <Route path="/admin/monitoring" element={<MonitoringScreen />} />
       </Route>
     </Route>
   )
