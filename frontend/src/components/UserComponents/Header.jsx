@@ -4,7 +4,7 @@ import { LinkContainer } from "react-router-bootstrap";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import img from '../../assets/RFC.svg'
+import img from "../../assets/Parking_icon.svg.png";
 
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../../slices/userApiSlice.js";
@@ -38,20 +38,21 @@ const Header = () => {
         <Container>
           <LinkContainer to="/">
             <Navbar.Brand>
-            <img
-              alt=""
-              src={img}
-              width="30"
-              height="30"
-              className="d-inline-block align-top"
-            />{' '}
-            RFC Wetteren player</Navbar.Brand>
+              <img
+                alt=""
+                src={img}
+                width="30"
+                height="30"
+                className="d-inline-block align-top"
+              />{" "}
+              ParkSmart
+            </Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
               {userInfo ? (
-                <>  
+                <>
                   <NavDropdown title={userInfo.name} id="userName">
                     <LinkContainer to="/profile">
                       <NavDropdown.Item> Profile </NavDropdown.Item>
@@ -67,8 +68,8 @@ const Header = () => {
                 <>
                   <NavDropdown title={userInfo.name} id="userName">
                     <NavDropdown.Item onClick={logOutHandler}>
-                          {" "}
-                          Logout{" "}
+                      {" "}
+                      Logout{" "}
                     </NavDropdown.Item>
                   </NavDropdown>
                 </>

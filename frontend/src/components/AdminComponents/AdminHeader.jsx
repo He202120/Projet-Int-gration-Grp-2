@@ -1,40 +1,33 @@
-import { Navbar, Nav, Container, NavDropdown, Badge } from 'react-bootstrap';
-import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
-import { LinkContainer } from 'react-router-bootstrap';
+import { Navbar, Nav, Container, NavDropdown, Badge } from "react-bootstrap";
+import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
+import { LinkContainer } from "react-router-bootstrap";
 
-import { useSelector, useDispatch } from 'react-redux';
-import img from '../../assets/RFC.svg'
+import { useSelector, useDispatch } from "react-redux";
+import img from "../../assets/Parking_icon.svg.png";
 
-import { useNavigate } from 'react-router-dom';
-import { useAdminLogoutMutation } from '../../slices/adminApiSlice.js';
-import { logout } from '../../slices/adminAuthSlice.js';
+import { useNavigate } from "react-router-dom";
+import { useAdminLogoutMutation } from "../../slices/adminApiSlice.js";
+import { logout } from "../../slices/adminAuthSlice.js";
 
 const AdminHeader = () => {
-
-  const { adminInfo } = useSelector( (state) => state.adminAuth);
+  const { adminInfo } = useSelector((state) => state.adminAuth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [ logoutApiCall ] = useAdminLogoutMutation();
+  const [logoutApiCall] = useAdminLogoutMutation();
 
   const logOutHandler = async () => {
-
     try {
-    
       await logoutApiCall().unwrap();
 
-      dispatch( logout() );
+      dispatch(logout());
 
-      navigate( '/admin' );
-
+      navigate("/admin");
     } catch (err) {
-
-      console.log( err );
-
+      console.log(err);
     }
-
-  }
+  };
 
   return (
     <header>
@@ -42,32 +35,31 @@ const AdminHeader = () => {
         <Container>
           <LinkContainer to="/admin">
             <Navbar.Brand>
-            <img
-              alt=""
-              src={img}
-              width="30"
-              height="30"
-              className="d-inline-block align-top"
-            />{' '}
-            RFC Wetteren player</Navbar.Brand>
+              <img
+                alt=""
+                src={img}
+                width="30"
+                height="30"
+                className="d-inline-block align-top"
+              />{" "}
+              ParkSmart
+            </Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-
-              { adminInfo ? (
-
+              {adminInfo ? (
                 <>
-                                         
                   <NavDropdown title={adminInfo.name} id="userName">
-                    <LinkContainer to='/admin/profile'>
+                    <LinkContainer to="/admin/profile">
                       <NavDropdown.Item> Profile </NavDropdown.Item>
                     </LinkContainer>
-                    <NavDropdown.Item onClick={ logOutHandler } > Logout </NavDropdown.Item>
+                    <NavDropdown.Item onClick={logOutHandler}>
+                      {" "}
+                      Logout{" "}
+                    </NavDropdown.Item>
                   </NavDropdown>
-
                 </>
-                
               ) : (
                 <>
                   <LinkContainer to="/admin/login">
@@ -82,10 +74,8 @@ const AdminHeader = () => {
                     </Nav.Link>
                   </LinkContainer>
                 </>
-              ) }
-
+              )}
             </Nav>
-
           </Navbar.Collapse>
         </Container>
       </Navbar>

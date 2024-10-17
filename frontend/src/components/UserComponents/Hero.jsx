@@ -41,10 +41,10 @@ const Hero = () => {
             </>
           ) : (
             <>
-              <h2 className="text-center mb-4"> RFC Wetteren User </h2>
+              <h2 className="text-center mb-4"> ParkSmart client </h2>
               <p className="text-center mb-4">
                 {" "}
-                Please Login to access Player Dashboard{" "}
+                Please Login to access client Dashboard{" "}
               </p>
               <div className="d-flex">
                 <LinkContainer to="/login">

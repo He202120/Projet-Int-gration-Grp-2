@@ -45,11 +45,11 @@ const RegisterScreen = () => {
           email,
           password,
           telephone,
-          plate
+          plate,
         }).unwrap();
         // Charlier Martin
         //dispatch(setCredentials({ ...responseFromApiCall }));
-        toast.success('Your request has been sent.');
+        toast.success("Your request has been sent.");
         navigate("/");
       } catch (err) {
         toast.error(err?.data?.errors[0]?.message || err?.error);
@@ -59,7 +59,7 @@ const RegisterScreen = () => {
 
   return (
     <FormContainer>
-      <h1>Register with Wetteren</h1>
+      <h1>Register with ParkSmart</h1>
 
       <Form onSubmit={submitHandler}>
         <Form.Group className="my-2" controlId="name">
@@ -121,7 +121,6 @@ const RegisterScreen = () => {
             onChange={(e) => setPlate(e.target.value)}
           ></Form.Control>
         </Form.Group>
-        
 
         <Button type="submit" variant="primary" className="mt-3">
           {" "}
