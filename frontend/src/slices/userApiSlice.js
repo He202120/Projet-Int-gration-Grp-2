@@ -1,7 +1,7 @@
 import { apiSlice } from "./apiSlice";
-import { USER_AUTHENTICATION_URL, USER_LOGOUT_URL, USER_REGISTRATION_URL, USER_PROFILE_URL} from '../utils/constants.js';
+import { USER_AUTHENTICATION_URL, USER_LOGOUT_URL, USER_REGISTRATION_URL, USER_PROFILE_URL, USER_UPDATE_SUBSCRIPTION} from '../utils/constants.js';
 
-const USER_AUTH_URL = USER_AUTHENTICATION_URL; 
+const USER_AUTH_URL = USER_AUTHENTICATION_URL;
 
 export const usersApiSlice = apiSlice.injectEndpoints({
     
@@ -41,10 +41,19 @@ export const usersApiSlice = apiSlice.injectEndpoints({
                 body: data
             })
 
-        })
+        }),
+        updateSubscription: builder.mutation({
+
+            query: (data) => ({
+                url: USER_UPDATE_SUBSCRIPTION,
+                method: 'PUT',
+                body: data
+            })
+
+        }),
 
     })
 })
 
 
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useUpdateUserMutation} = usersApiSlice;
+export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useUpdateUserMutation, useUpdateSubscriptionMutation} = usersApiSlice;

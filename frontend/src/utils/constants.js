@@ -5,7 +5,7 @@ export const USER_AUTHENTICATION_URL = '/api/v1/user/auth'
 export const USER_LOGOUT_URL = '/api/v1/user/logout'
 export const USER_REGISTRATION_URL = '/api/v1/user'
 export const USER_PROFILE_URL = '/api/v1/user/profile'
-
+export const USER_UPDATE_SUBSCRIPTION ='/api/v1/user/set_sub'
 export const ADMIN_AUTHENTICATION_URL = '/api/v1/admin/auth'
 export const ADMIN_LOGOUT_URL = '/api/v1/admin/logout'
 export const ADMIN_REGISTRATION_URL = '/api/v1/admin'

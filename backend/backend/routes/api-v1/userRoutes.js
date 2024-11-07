@@ -14,7 +14,8 @@ import {
   registerUser,
   logoutUser,
   getUserProfile,
-  updateUserProfile
+  updateUserProfile,
+  update_Abonnement
 } from "../../controllers/userController.js";
 
 import { userSignUpDataValidation, userSignInDataValidation } from "./backendDataValidationConfig.js";
@@ -45,5 +46,7 @@ router
     updateUserProfile
   );
 // In the above line, the route is same, above line will use the specified controller according to the type of the request
+
+router.put("/set_sub", requireAuth, verifyUser, update_Abonnement);
 
 export default router;

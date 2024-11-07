@@ -10,7 +10,6 @@ import generateAuthToken from "../utils/jwtHelpers/generateAuthToken.js";
 import destroyAuthToken from "../utils/jwtHelpers/destroyAuthToken.js";
 import sendMail from "../utils/EmailSender/mail.js";
 
-
 const authUser = asyncHandler(async (req, res) => {
   /*
      # Desc: Auth user/set token
@@ -73,7 +72,7 @@ const registerUser = asyncHandler(async (req, res) => {
      # Access: PUBLIC
     */
 
-  const { name, email, password, plate, telephone, parking } = req.body;
+  const { name, email, password, plate, telephone, parking, subscription, end_date, entrance } = req.body;
 
   // Check if user already exist
   const userExists = await User.findOne({ email });
@@ -91,7 +90,10 @@ const registerUser = asyncHandler(async (req, res) => {
     password: password,
     plate: plate,
     telephone: telephone,
-    parking: 0
+    parking: 0,
+    subscription: null,
+    end_date: null,
+    entrance: null
   });
 
   if (user) {
@@ -184,10 +186,42 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+const update_Abonnement = asyncHandler(async (req, res) => {
+  /*
+     # Desc: Update user subscription data
+     # Route: PUT /api/v1/user/profile
+     # Access: PRIVATE
+  */
+
+  // Find the user data with user id in the request object
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    // Update the user's subscription data (if provided in the request body)
+    user.subscription = req.body.subscription || user.subscription;
+    user.end_date = req.body.end_date || user.end_date;
+    user.entrance = req.body.entrance !== undefined ? req.body.entrance : user.entrance;
+
+    // Save the updated user data
+    const updatedUserData = await user.save();
+
+    // Send the response with the updated subscription data
+    res.status(200).json({
+      subscription: updatedUserData.subscription,
+      end_date: updatedUserData.end_date,
+      entrance: updatedUserData.entrance,
+    });
+  } else {
+    throw new BadRequestError("User not found.");
+  }
+});
+
+
 export {
   authUser,
   registerUser,
   logoutUser,
   getUserProfile,
-  updateUserProfile
+  updateUserProfile,
+  update_Abonnement
 };

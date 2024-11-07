@@ -34,7 +34,16 @@ const userSchema = mongoose.Schema({
     parking: {
         type: Number,
         required: true,
-    }
+    },
+    subscription: {
+        type: String,
+    },
+    end_date: {
+        type: Date,
+    },
+    entrance: {
+        type: Number,
+    }   
 
 },{
 
