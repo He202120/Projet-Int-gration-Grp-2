@@ -18,11 +18,11 @@ import HomeScreen from "./screens/userScreens/HomeScreen.jsx";
 import LoginScreen from "./screens/userScreens/LoginScreen.jsx";
 import RegisterScreen from "./screens/userScreens/RegisterScreen.jsx";
 import ProfileScreen from "./screens/userScreens/ProfileScreen.jsx";
-<<<<<<< HEAD
+
 import AboUser from "./screens/userScreens/AbonnementScreen.jsx";
-=======
+
 import ParkingAccess from "./screens/userScreens/ParkingAccess.jsx";
->>>>>>> 936b65dfd60cf88333610a780f2e3c2ccb532cce
+
 
 //? ==================================== Admin Screens Import ====================================
 import AdminPrivateRoutes from "./screens/adminScreens/PrivateRoutes.jsx";
