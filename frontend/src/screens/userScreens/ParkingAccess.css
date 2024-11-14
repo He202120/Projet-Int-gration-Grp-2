@@ -1,0 +1,20 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  height: 100vh;
+}
+
+.bodyContainer {
+  display: flex;
+  justify-content: center;
+}
+
+/* Sizing of map container */
+.leaflet-container {
+  height: 70vh;
+  width: 150vh;
+}
