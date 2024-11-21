@@ -59,6 +59,13 @@ const Header = () => {
                        Abonnement
                     </Nav.Link>                 
                   </LinkContainer> 
+                  
+                  <LinkContainer to="/addreview">
+                    <Nav.Link >
+                    Addreview
+                    </Nav.Link>                 
+                  </LinkContainer> 
+
 
                   <LinkContainer to="/parkingAccess">
                     <Nav.Link> Parking access </Nav.Link>
