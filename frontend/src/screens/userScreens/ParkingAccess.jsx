@@ -3,42 +3,45 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
 import openicon from "../../assets/emplacement.png"; // Icon for open parking
 import closeicon from "../../assets/emplacement_rouge.png"; // Icon for closed parking
+import { toast } from "react-toastify";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
+
+import { useGetparkingMutation } from "../../slices/userApiSlice";
 
 import "./ParkingAccess.css";
 import "leaflet/dist/leaflet.css";
 
 const ParkingAccess = () => {
+  const [parkingsData, setParkingsData] = useState([]);
+
+  const [parkingsDataFromAPI, { isLoading }] = useGetparkingMutation();
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const responseFromApiCall = await parkingsDataFromAPI();
+
+        const parkingsArray = responseFromApiCall.data.parkingsData;
+        console.log(parkingsArray);
+
+        setParkingsData(parkingsArray);
+      };
+
+      fetchData();
+      const interval = setInterval(() => {
+        fetchData(); // Récupérer les données toutes les 5 secondes
+      }, 5000); // 5000 millisecondes = 5 secondes
+
+      return () => clearInterval(interval); // Nettoyer l'intervalle lors du démontage du composant
+    } catch (err) {
+      toast.error(err?.data?.errors[0]?.message || err);
+
+      console.error("Error fetching parkings:", err);
+    }
+  }, []);
+
   const [userLocation, setUserLocation] = useState(null);
-  const [markers, setMarkers] = useState([
-    {
-      geocode: [50.66621031188031, 4.612283636463168],
-      name: "Ephec",
-      status: "Libre",
-      parkingPlaces: 50,
-      id: "ec-lln",
-    },
-    {
-      geocode: [50.664354957837446, 4.621078875552762],
-      name: "Baudoin 1er",
-      status: "Plein",
-      parkingPlaces: 0,
-      id: "bn1-lln",
-    },
-    {
-      geocode: [50.671503891861924, 4.616754274493264],
-      name: "L'Esplanade",
-      status: "Libre",
-      parkingPlaces: 30,
-      id: "esp-lln",
-    },
-    {
-      geocode: [50.66682565717643, 4.613395577000956],
-      name: "Lerclercq",
-      status: "Libre",
-      parkingPlaces: 20,
-      id: "lcq-lln",
-    },
-  ]);
 
   useEffect(() => {
     // Get user location
@@ -52,7 +55,7 @@ const ParkingAccess = () => {
     }
   }, []);
 
-  const getIcon = (status, parkingPlaces) => {
+  const getIcon = (parkingPlaces) => {
     return new Icon({
       iconUrl: parkingPlaces === 0 ? closeicon : openicon,
       iconSize: [38, 38],
@@ -73,6 +76,10 @@ const ParkingAccess = () => {
     return R * c; // Distance in km
   };
 
+  const statusParking = (places) => {
+    return places > 0 ? "Libre" : "Plein";
+  };
+
   return (
     <div className="bodyContainer">
       <MapContainer center={[50.669601, 4.61121]} zoom={13}>
@@ -81,30 +88,30 @@ const ParkingAccess = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {markers.map((marker) => {
+        {parkingsData.map((marker) => {
           const distance = userLocation
             ? calculateDistance(
                 userLocation.lat,
                 userLocation.lng,
-                marker.geocode[0],
-                marker.geocode[1]
+                marker.latitude,
+                marker.longitude
               ).toFixed(2)
             : "N/A"; // Distance will be "N/A" until user location is available
 
           return (
             <Marker
-              key={marker.id}
-              icon={getIcon(marker.status, marker.parkingPlaces)}
-              position={marker.geocode}
+              key={marker._id}
+              icon={getIcon(marker.places)}
+              position={[marker.latitude, marker.longitude]}
             >
               <Popup>
                 <div style={{ width: "500px" }}>
                   <h3>{marker.name}</h3>
                   <p>
-                    <strong>Status:</strong> {marker.status}
+                    <strong>Status:</strong> {statusParking(marker.places)}
                   </p>
                   <p>
-                    <strong>Places disponibles:</strong> {marker.parkingPlaces}
+                    <strong>Places disponibles:</strong> {marker.places}
                   </p>
                   <p>
                     <strong>Distance de vous:</strong> {distance} km

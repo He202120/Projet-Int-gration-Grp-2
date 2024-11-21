@@ -11,6 +11,8 @@
   },
   "keywords": [],
   "dependencies": {
+    "@headlessui/react": "^2.2.0",
+    "@heroicons/react": "^2.2.0",
     "@reduxjs/toolkit": "^1.9.5",
     "bootstrap": "^5.3.1",
     "mapbox-gl": "^3.7.0",

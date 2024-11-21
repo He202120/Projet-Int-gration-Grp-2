@@ -21,7 +21,9 @@ const authUser = asyncHandler(async (req, res) => {
 
   if (!email || !password) {
     // If email or password is empty, return error
-    throw new BadRequestError("Email or Password is missing in the request - User authentication failed.");
+    throw new BadRequestError(
+      "Email or Password is missing in the request - User authentication failed."
+    );
   }
 
   // Find the user in Db with the email and password
@@ -34,16 +36,15 @@ const authUser = asyncHandler(async (req, res) => {
   }
 
   if (passwordValid) {
-
     // If password verified, check user-blocked status. send response back with jwt token
     const blockedUser = user.isBlocked();
-    
+
     if (blockedUser) {
       throw new BadRequestError("You are not alreay accept");
     }
 
     // If password verified and user is not-blocked, send response back with jwt token
-    
+
     generateAuthToken(res, user._id, user.email); // Middleware to Generate token and send it back in response object
 
     let registeredUserData = {
@@ -61,7 +62,9 @@ const authUser = asyncHandler(async (req, res) => {
   if (!user || !passwordValid) {
     // If user or user password is not valid, send error back
 
-    throw new BadRequestError("Invalid Email or Password - User authentication failed.");
+    throw new BadRequestError(
+      "Invalid Email or Password - User authentication failed."
+    );
   }
 });
 
@@ -72,14 +75,23 @@ const registerUser = asyncHandler(async (req, res) => {
      # Access: PUBLIC
     */
 
-  const { name, email, password, plate, telephone, parking, subscription, end_date, entrance } = req.body;
+  const {
+    name,
+    email,
+    password,
+    plate,
+    telephone,
+    parking,
+    subscription,
+    end_date,
+    entrance,
+  } = req.body;
 
   // Check if user already exist
   const userExists = await User.findOne({ email });
 
   // If the user already exists, throw an error
   if (userExists) {
-
     throw new BadRequestError("User already registered - Sign-Up Failed.");
   }
 
@@ -93,7 +105,7 @@ const registerUser = asyncHandler(async (req, res) => {
     parking: 0,
     subscription: null,
     end_date: null,
-    entrance: null
+    entrance: null,
   });
 
   if (user) {
@@ -101,7 +113,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
     // Charlier Martin
     //generateAuthToken(res, user._id, user.email); // Middleware to Generate token and send it back in response object
-
 
     const registeredUserData = {
       name: user.name,
@@ -111,8 +122,6 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(201).json(registeredUserData);
 
     await sendMail(user.email, user.name, user.plate);
-  
-
   } else {
     // If user was NOT Created, send error back
 
@@ -181,7 +190,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       profileImageName: updatedUserData.profileImageName,
     });
   } else {
-
     throw new BadRequestError("User not found.");
   }
 });
@@ -200,7 +208,8 @@ const update_Abonnement = asyncHandler(async (req, res) => {
     // Update the user's subscription data (if provided in the request body)
     user.subscription = req.body.subscription || user.subscription;
     user.end_date = req.body.end_date || user.end_date;
-    user.entrance = req.body.entrance !== undefined ? req.body.entrance : user.entrance;
+    user.entrance =
+      req.body.entrance !== undefined ? req.body.entrance : user.entrance;
 
     // Save the updated user data
     const updatedUserData = await user.save();
@@ -216,12 +225,11 @@ const update_Abonnement = asyncHandler(async (req, res) => {
   }
 });
 
-
 export {
   authUser,
   registerUser,
   logoutUser,
   getUserProfile,
   updateUserProfile,
-  update_Abonnement
+  update_Abonnement,
 };

@@ -7,7 +7,7 @@ import express from "express";
 // Reference: https://www.npmjs.com/package/base-auth-handler
 import { requireAuth, validateRequest } from "base-auth-handler";
 
-import verifyUser from "../../middlewares/verifyUserMiddleware.js"
+import verifyUser from "../../middlewares/verifyUserMiddleware.js";
 
 import {
   authUser,
@@ -15,10 +15,15 @@ import {
   logoutUser,
   getUserProfile,
   updateUserProfile,
-  update_Abonnement
+  update_Abonnement,
 } from "../../controllers/userController.js";
 
-import { userSignUpDataValidation, userSignInDataValidation } from "./backendDataValidationConfig.js";
+import { getAllParkings } from "../../controllers/parkingController.js";
+
+import {
+  userSignUpDataValidation,
+  userSignInDataValidation,
+} from "./backendDataValidationConfig.js";
 import { multerUploadUserProfile } from "../../config/multerConfig.js";
 
 // ===================== Configuring Express Router =====================
@@ -48,5 +53,7 @@ router
 // In the above line, the route is same, above line will use the specified controller according to the type of the request
 
 router.put("/set_sub", requireAuth, verifyUser, update_Abonnement);
+
+router.post("/get_parking", requireAuth, verifyUser, getAllParkings);
 
 export default router;

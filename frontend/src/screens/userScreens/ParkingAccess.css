@@ -11,10 +11,11 @@
 .bodyContainer {
   display: flex;
   justify-content: center;
+  flex-direction: column;
 }
 
 /* Sizing of map container */
 .leaflet-container {
   height: 70vh;
-  width: 150vh;
+  width: 160vh;
 }
