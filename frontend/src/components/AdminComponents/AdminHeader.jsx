@@ -50,6 +50,12 @@ const AdminHeader = () => {
             <Nav className="ms-auto">
               {adminInfo ? (
                 <>
+                  <LinkContainer to="/admin/monitoring">
+                    <Nav.Link >
+                      Vue Parking
+                    </Nav.Link>
+                  </LinkContainer>
+
                   <NavDropdown title={adminInfo.name} id="userName">
                     <LinkContainer to="/admin/profile">
                       <NavDropdown.Item> Profile </NavDropdown.Item>
