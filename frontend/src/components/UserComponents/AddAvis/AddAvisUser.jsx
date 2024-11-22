@@ -18,13 +18,13 @@ const Advis = () => {
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector((state) => state.auth);
-  const [addAvis, { isLoading }] = useAddAvisMutation();
+  const [addAvis, { isLoading }] = useAddAvisMutation(); // Renommé pour éviter la confusion
 
   useEffect(() => {
     if (!userInfo) {
       navigate("/login"); // Redirection si l'utilisateur n'est pas connecté
     } else {
-      setUserId(userInfo._id); // Remplir l'ID utilisateur
+      setUserId(userInfo.name); // Remplir l'ID utilisateur
     }
   }, [navigate, userInfo]);
 
@@ -33,22 +33,29 @@ const Advis = () => {
 
     if (rating < 1 || rating > 5) {
       toast.error("La note doit être comprise entre 1 et 5.");
-    } else {
-      try {
-        const response = await addAvis({ rating, comment }).unwrap();
+      return;
+    }
 
-        console.log(rating  + comment )
-        toast.success("Votre avis a été soumis avec succès.");
-        navigate("/"); // Rediriger après soumission
-      } catch (err) {
-        const errorMessage =
-          err?.data?.errors?.[0]?.message ||
-          err?.data?.message ||
-          err?.error ||
-          "Une erreur est survenue.";
+    if (!comment.trim()) {
+      toast.error("Le commentaire ne peut pas être vide.");
+      return;
+    }
 
-        toast.error(errorMessage);
-      }
+    try {
+      console.log("Données soumises :", { userId, rating, comment });
+
+      const response = await addAvis({ userId, rating, comment }).unwrap();
+
+      toast.success("Votre avis a été soumis avec succès.");
+      navigate("/"); // Rediriger après soumission
+    } catch (err) {
+      const errorMessage =
+        err?.data?.errors?.[0]?.message ||
+        err?.data?.message ||
+        err?.message || // Gestion par défaut
+        "Une erreur est survenue.";
+
+      toast.error(errorMessage);
     }
   };
 
@@ -66,7 +73,7 @@ const Advis = () => {
             max="5"
             placeholder="Entrez une note entre 1 et 5"
             value={rating}
-            onChange={(e) => setRating(e.target.value)}
+            onChange={(e) => setRating(Number(e.target.value))} // Conversion en nombre
           ></Form.Control>
         </Form.Group>
 

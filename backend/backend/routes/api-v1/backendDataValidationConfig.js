@@ -67,6 +67,28 @@ const adminUserUpdateDataValidation = [
   body("email").isEmail().withMessage("Provide a valid email."),
 ];
 
+/***********************************wilfried************************** */
+
+const add_avisDataValidation = [
+  
+  body("rating")
+    .notEmpty()
+    .withMessage("Une note (rating) doit être fournie.")
+    .isFloat({ min: 1, max: 5 })
+    .withMessage("La note (rating) doit être comprise entre 1 et 5."),
+  
+  body("comment")
+    .trim()
+    .notEmpty()
+    .withMessage("Un commentaire doit être fourni.")
+    .isLength({ max: 500 })
+    .withMessage("Le commentaire ne doit pas dépasser 500 caractères.")
+];
+
+export default add_avisDataValidation;
+
+
+
 export {
   userSignUpDataValidation,
   userSignInDataValidation,
@@ -74,4 +96,5 @@ export {
   adminSignInDataValidation,
   adminUserBlockingDataValidation,
   adminUserUpdateDataValidation,
+  add_avisDataValidation
 };

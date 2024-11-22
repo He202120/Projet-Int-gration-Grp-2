@@ -6,6 +6,8 @@ import { BadRequestError } from "base-error-handler";
 
 import User from "../models/userModel.js";
 
+import Avis from "../models/avisModel.js";
+
 import generateAuthToken from "../utils/jwtHelpers/generateAuthToken.js";
 import destroyAuthToken from "../utils/jwtHelpers/destroyAuthToken.js";
 import sendMail from "../utils/EmailSender/mail.js";
@@ -216,6 +218,35 @@ const update_Abonnement = asyncHandler(async (req, res) => {
   }
 });
 
+/********************************add wilfried************************************************* */
+const registerAvis = asyncHandler(async (req, res) => {
+  const {userId, rating, comment } = req.body;
+
+  // Validation des champs requis
+  if (!userId || !rating || !comment) {
+      res.status(400);
+      throw new Error('Tous les champs obligatoires (rating, comment) doivent être renseignés.');
+  }
+
+  // Création d'un nouvel avis
+  try {
+    const newReview = await Avis.create({
+        userId: userId,
+        rating: rating,
+        comment: comment
+      });
+
+      res.status(201).json({
+          message: 'Avis ajouté avec succès',
+          review: newReview
+      });
+  } catch (error) {
+      res.status(500);
+      throw new Error('Erreur lors de l\'ajout de l\'avis : ' + error.message);
+  }
+});
+
+
 
 export {
   authUser,
@@ -223,5 +254,6 @@ export {
   logoutUser,
   getUserProfile,
   updateUserProfile,
-  update_Abonnement
+  update_Abonnement,
+  registerAvis,
 };

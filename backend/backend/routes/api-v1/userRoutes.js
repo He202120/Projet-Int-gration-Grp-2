@@ -15,12 +15,14 @@ import {
   logoutUser,
   getUserProfile,
   updateUserProfile,
-  update_Abonnement
+  update_Abonnement,
+  registerAvis,
 } from "../../controllers/userController.js";
 
 import { userSignUpDataValidation, userSignInDataValidation } from "./backendDataValidationConfig.js";
 import { multerUploadUserProfile } from "../../config/multerConfig.js";
 
+import {add_avisDataValidation} from "./backendDataValidationConfig.js"
 // ===================== Configuring Express Router =====================
 const router = express.Router();
 
@@ -33,6 +35,9 @@ router.post("/", userSignUpDataValidation, validateRequest, registerUser);
 router.post("/auth", userSignInDataValidation, validateRequest, authUser);
 
 router.post("/logout", logoutUser);
+
+// Route pour l'ajout d'un avis
+router.put("/avis", add_avisDataValidation, requireAuth, verifyUser, registerAvis);
 
 //* ==================== User Profile Routes ====================
 

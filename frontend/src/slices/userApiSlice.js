@@ -52,7 +52,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 
         }),
       // Mutation pour ajouter un avis utilisateur
-        addAvis: builder.mutation({
+      addAvis: builder.mutation({
             query: (data) => ({
                 url: USER_ADD_AVIS_URL, // Utilisation du nom d'URL correct
                 method: 'PUT',
