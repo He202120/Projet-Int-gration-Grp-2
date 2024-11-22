@@ -23,6 +23,8 @@ import AboUser from "./screens/userScreens/AbonnementScreen.jsx";
 
 import ParkingAccess from "./screens/userScreens/ParkingAccess.jsx";
 
+import AvisUser from "./screens/userScreens/AddAvisScreen.jsx"
+
 
 //? ==================================== Admin Screens Import ====================================
 import AdminPrivateRoutes from "./screens/adminScreens/PrivateRoutes.jsx";
@@ -44,7 +46,10 @@ const router = createBrowserRouter(
 
       <Route path="/register" element={<RegisterScreen />} />
 
-      <Route path="/abonnement" element={<AboUser />} />
+      <Route path="/abonnement" element={<AboUser />} />  
+      
+      <Route path="/addreview" element={< AvisUser />} />  
+     
 
       {/* USER PRIVATE ROUTES */}
       <Route path="" element={<PrivateRoutes />}>
