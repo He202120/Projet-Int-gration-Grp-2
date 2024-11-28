@@ -7,6 +7,7 @@ export const USER_PROFILE_URL = "/api/v1/user/profile";
 export const USER_UPDATE_SUBSCRIPTION = "/api/v1/user/set_sub";
 export const USER_GET_SUBRSCRIPTION = "/api/v1/user/get_sub";
 export const USER_GET_PARKING = "api/v1/user/get_parking";
+export const USER_GET_AVIS_URL = "/api/v1/user/get_avis"
 export const ADMIN_AUTHENTICATION_URL = "/api/v1/admin/auth";
 export const ADMIN_LOGOUT_URL = "/api/v1/admin/logout";
 export const ADMIN_REGISTRATION_URL = "/api/v1/admin";
@@ -17,5 +18,6 @@ export const ADMIN_UNBLOCK_USER_URL = "/api/v1/admin/unblock-user";
 export const ADMIN_UPDATE_USER_URL = "/api/v1/admin/update-user";
 export const ADMIN_DELETE_USER_URL = "/api/v1/admin/delete-user";
 export const USER_ADD_AVIS_URL = "/api/v1/user/avis";
+export const ADMIN_USERS_DATA_GET_URL = "/api/v1/admin/get-info-users";
 export const PROFILE_IMAGE_DIR_PATH = "//localhost:5000/UserProfileImages/";
 

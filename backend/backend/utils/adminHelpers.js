@@ -92,6 +92,33 @@ const updateUser = async (userData) => {
   }
 };
 
+const getUsers = async () => {
+  try {
+    const users = await User.find(
+        {},
+        {
+          name: 1,
+          email: 1,
+          blocked: 1,
+          plate: 1,
+          telephone: 1,
+          parking: 1,
+          subscription: 1,
+          end_date: 1,
+          entrance: 1,
+          arrival: 1,
+          num_parking: 1,
+        }
+    );
+
+    return users;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+
+    throw error;
+  }
+};
+
 //ajout martin
 
-export { fetchAllUsers, blockUserHelper, unBlockUserHelper, updateUser };
+export { fetchAllUsers, blockUserHelper, unBlockUserHelper, updateUser, getUsers };

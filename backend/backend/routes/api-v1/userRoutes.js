@@ -8,7 +8,7 @@ import express from "express";
 import { requireAuth, validateRequest } from "base-auth-handler";
 
 import verifyUser from "../../middlewares/verifyUserMiddleware.js";
-
+import { getAllAvis } from "../../controllers/avisController.js";
 import {
   authUser,
   registerUser,
@@ -44,6 +44,7 @@ router.post("/logout", logoutUser);
 
 // Route pour l'ajout d'un avis
 router.put("/avis", add_avisDataValidation, requireAuth, verifyUser, registerAvis);
+router.post("/get_avis", requireAuth, verifyUser, getAllAvis)
 
 //* ==================== User Profile Routes ====================
 

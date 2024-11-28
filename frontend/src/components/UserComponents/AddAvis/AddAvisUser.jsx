@@ -1,32 +1,48 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button, Row, Col, ListGroup } from "react-bootstrap";
 import FormContainer from "../../FormContainer";
-
-import { useDispatch, useSelector } from "react-redux";
-import { useAddAvisMutation } from "../../../slices/userApiSlice";
-
+import { useSelector } from "react-redux";
+import { useAddAvisMutation, useGetAvisMutation } from "../../../slices/userApiSlice";
 import { toast } from "react-toastify";
 import Loader from "../../../components/Loader";
+import StarRating from "../../../components/StarRating"; // Importation du composant StarRating
 
 const Advis = () => {
-  const [userId, setUserId] = useState(""); // ID utilisateur, récupéré dynamiquement
-  const [rating, setRating] = useState(0); // Note entre 1 et 5
-  const [comment, setComment] = useState(""); // Commentaire de l'utilisateur
+  const [userId, setUserId] = useState(""); 
+  const [rating, setRating] = useState(0); 
+  const [comment, setComment] = useState(""); 
+  const [avisList, setAvisList] = useState([]);
+  const [isLoadingAvis, setIsLoadingAvis] = useState(false); // Gérer le chargement des avis
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
   const { userInfo } = useSelector((state) => state.auth);
-  const [addAvis, { isLoading }] = useAddAvisMutation(); // Renommé pour éviter la confusion
+
+  const [addAvis, { isLoading: isAdding }] = useAddAvisMutation();
+  const [getAvis, { isLoading: isFetching }] = useGetAvisMutation();
 
   useEffect(() => {
     if (!userInfo) {
-      navigate("/login"); // Redirection si l'utilisateur n'est pas connecté
+      navigate("/login");
     } else {
-      setUserId(userInfo.name); // Remplir l'ID utilisateur
+      setUserId(userInfo.name); 
+      fetchAvis(); 
     }
   }, [navigate, userInfo]);
+
+  const fetchAvis = async () => {
+    setIsLoadingAvis(true); // Lancer le chargement des avis
+    try {
+      const responseFromApiCall = await getAvis(); 
+      const responses = responseFromApiCall.data.avisData;
+      setAvisList(responses);
+    } catch (err) {
+       console.error(err);
+      toast.error("Impossible de charger les avis.");
+    } finally {
+      setIsLoadingAvis(false); // Terminer le chargement des avis
+    }
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -42,19 +58,18 @@ const Advis = () => {
     }
 
     try {
-      console.log("Données soumises :", { userId, rating, comment });
-
-      const response = await addAvis({ userId, rating, comment }).unwrap();
-
+      const newAvis = { userId, rating, comment };
+      await addAvis(newAvis).unwrap(); 
       toast.success("Votre avis a été soumis avec succès.");
-      navigate("/"); // Rediriger après soumission
+      setRating(0);
+      setComment(""); 
+      fetchAvis(); 
     } catch (err) {
       const errorMessage =
         err?.data?.errors?.[0]?.message ||
         err?.data?.message ||
-        err?.message || // Gestion par défaut
+        err?.message ||
         "Une erreur est survenue.";
-
       toast.error(errorMessage);
     }
   };
@@ -64,20 +79,12 @@ const Advis = () => {
       <h1>Ajouter un avis</h1>
 
       <Form onSubmit={submitHandler}>
-        {/* Note de l'avis */}
         <Form.Group className="my-2" controlId="rating">
-          <Form.Label>Note (1 à 5)</Form.Label>
-          <Form.Control
-            type="number"
-            min="1"
-            max="5"
-            placeholder="Entrez une note entre 1 et 5"
-            value={rating}
-            onChange={(e) => setRating(Number(e.target.value))} // Conversion en nombre
-          ></Form.Control>
+          <Form.Label>Note</Form.Label>
+          {/* Remplacer la saisie numérique par le composant StarRating */}
+          <StarRating rating={rating} setRating={setRating} />
         </Form.Group>
 
-        {/* Commentaire */}
         <Form.Group className="my-2" controlId="comment">
           <Form.Label>Commentaire</Form.Label>
           <Form.Control
@@ -89,12 +96,30 @@ const Advis = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Button type="submit" variant="primary" className="mt-3">
-          Soumettre l'avis
+        <Button type="submit" variant="primary" className="mt-3" disabled={isAdding}>
+          {isAdding ? "Envoi en cours..." : "Soumettre l'avis"}
         </Button>
       </Form>
 
-      {isLoading && <Loader />}
+      {isAdding && <Loader />}
+
+      <h2 className="mt-4">Avis des utilisateurs</h2>
+      {isLoadingAvis ? (
+        <Loader /> 
+      ) : avisList.length === 0 ? (
+        <p>Aucun avis pour le moment.</p>
+      ) : (
+        <ListGroup>
+          {avisList.map((avis, index) => (
+            <ListGroup.Item key={index}>
+              <strong>{avis.userId}</strong>  <small>{new Date(avis.createdAt).toLocaleString()}</small> {" "}
+              {/* Affichage de la note sous forme d'étoiles */}
+              <StarRating rating={avis.rating} setRating={() => {}} />
+              <p><strong>Avis utilisateur:</strong> {avis.comment}</p> {/* Affichage du commentaire correctement */}
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      )}
 
       <Row className="py-3">
         <Col>

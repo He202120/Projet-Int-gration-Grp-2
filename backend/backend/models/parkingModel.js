@@ -27,7 +27,17 @@ const parkingSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    completion: {
+      type: Number,
+      default: 0,
+    },
+    // a changer !!!!!!
+    num_parking: {
+      type: Number,
+      default: 0,
+    },
   },
+
   {
     timestamps: true, // This will automatically add timestamps for any operations done.
   }
