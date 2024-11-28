@@ -78,5 +78,7 @@ export const {
   useUpdateSubscriptionMutation,
   useAddAvisMutation,
   useGetparkingMutation,
+  useGetAvisMutation,
+  useGetSubscriptionMutation,
 } = usersApiSlice;
 
