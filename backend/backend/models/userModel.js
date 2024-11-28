@@ -43,7 +43,15 @@ const userSchema = mongoose.Schema({
     },
     entrance: {
         type: Number,
-    }   
+    },
+    arrival: {
+        type: Date,
+        default: null
+    },
+    num_parking: {
+        type: Number,
+        default: 0
+    },
 
 },{
 

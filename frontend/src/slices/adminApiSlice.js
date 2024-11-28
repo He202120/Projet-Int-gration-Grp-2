@@ -9,6 +9,7 @@ import {
     ADMIN_UNBLOCK_USER_URL,
     ADMIN_UPDATE_USER_URL,
     ADMIN_DELETE_USER_URL,
+    ADMIN_USERS_DATA_GET_URL,
 } from '../utils/constants.js';
 
 
@@ -88,6 +89,15 @@ export const adminApiSlice = apiSlice.injectEndpoints({
 
         }),
 
+        getUsersAllData: builder.mutation({
+
+            query: () => ({
+                url: ADMIN_USERS_DATA_GET_URL,
+                method: 'POST'
+            })
+
+        }),
+
         DeleteUser: builder.mutation({
             
             query: (data) => ({
@@ -112,4 +122,5 @@ export const {
     useUnblockUserMutation,
     useUpdateUserByAdminMutation,
     useDeleteUserMutation,
+    useGetUsersAllDataMutation,
 } = adminApiSlice;
