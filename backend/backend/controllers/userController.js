@@ -199,7 +199,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 const update_Abonnement = asyncHandler(async (req, res) => {
   /*
      # Desc: Update user subscription data
-     # Route: PUT /api/v1/user/profile
+     # Route: PUT /api/v1/user/set-sub
      # Access: PRIVATE
   */
 
@@ -222,6 +222,33 @@ const update_Abonnement = asyncHandler(async (req, res) => {
       end_date: updatedUserData.end_date,
       entrance: updatedUserData.entrance,
     });
+  } else {
+    throw new BadRequestError("User not found.");
+  }
+});
+
+const get_Abonnement = asyncHandler(async (req, res) => {
+  /*
+     # Desc: Get user profile
+     # Route: GET /api/v1/user/get-sub
+     # Access: PRIVATE
+  */
+
+  // Récupérer l'email de l'objet reçu dans la requête
+  const email = req.body.email; 
+  
+  if (!email) {
+    throw new BadRequestError("Email is required.");
+  }
+
+  // Chercher dans le modèle User l'utilisateur correspondant à cet email
+  const user = await User.findOne({ email }); // Rechercher par email
+
+  if (user) {
+    // Retourner toutes les données de l'utilisateur
+    res.status(200).json({     
+      subscription: user.subscription,
+      end_date: user.end_date,}); // Envoyer l'objet utilisateur entier
   } else {
     throw new BadRequestError("User not found.");
   }
@@ -265,4 +292,5 @@ export {
   updateUserProfile,
   update_Abonnement,
   registerAvis,
+  get_Abonnement,
 };

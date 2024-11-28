@@ -18,7 +18,7 @@ const userSchema = mongoose.Schema({
     },
     blocked: {
         type: Boolean,
-        default: true
+        default: false
     },
     profileImageName: {
         type: String

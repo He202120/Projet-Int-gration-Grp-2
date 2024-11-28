@@ -12,7 +12,6 @@ const fetchAllUsers = async () => {
         parking: 1,
         subscription: 1,
         end_date: 1,
-        entrance: 1,
       }
     );
 

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import { useSelector } from "react-redux"; // Import de useSelector
-import { useUpdateSubscriptionMutation } from "../../../slices/userApiSlice"; 
-import { toast } from "react-toastify";// Import de la mutation
+import { useSelector } from "react-redux";
+import {
+  useUpdateSubscriptionMutation,
+  useGetSubscriptionMutation,
+} from "../../../slices/userApiSlice";
+import { toast } from "react-toastify";
 
 // Fonction pour calculer la date de fin d'abonnement
 const calculateEndDate = (plan) => {
@@ -20,67 +23,77 @@ const calculateEndDate = (plan) => {
 function ChoixAbo() {
   const [selectedPlan, setSelectedPlan] = useState("");
   const [userInfo, setUserInfo] = useState({}); // Nouveau state local pour stocker les données de authState
+  const [subscriptionData, setSubscriptionData] = useState(null); // State pour stocker la réponse de l'abonnement
 
   // Utilisation de useSelector pour accéder à state.auth
   const authState = useSelector((state) => state.auth);
 
-  // Import de la mutation
-  const [updateSubscription, { isLoading, isError, isSuccess, error }] = useUpdateSubscriptionMutation();
+  // Import des mutations
+  const [updateSubscription] = useUpdateSubscriptionMutation();
+  const [getSubscription, { data, isLoading, isError, error }] =
+    useGetSubscriptionMutation();
 
-  // Affichage des données dans authState pour déboguer
-  useEffect(() => {
-  //  console.log("authState dans useEffect :", authState);
-  }, [authState]);
-
-  // Utilisation de useEffect pour attendre que authState ait des données
+  // Récupération des données authState
   useEffect(() => {
     if (authState?.userInfo?.name && authState?.userInfo?.email) {
-      // Si les données sont disponibles, les mettre dans userInfo
       setUserInfo({
         name: authState.userInfo.name,
         email: authState.userInfo.email,
       });
     } else {
-      // Si authState n'a pas les données attendues, loguer un message pour déboguer
       console.log("Données de authState manquantes : ", authState);
     }
-  }, [authState]); // Effectué lorsque authState change
+  }, [authState]);
 
-  // Affichage de state.auth dans la console une fois que les données sont disponibles
   useEffect(() => {
-    if (userInfo.name && userInfo.email) {
-//      console.log("Données de l'état auth :", userInfo);
-    }
-  }, [userInfo]); // Affiche les données dans la console quand userInfo change
+    const fetchSubscription = async () => {
+      if (userInfo.email) {
+        try {
+          const result = await getSubscription({ email: userInfo.email }).unwrap();
+          setSubscriptionData(result);
+        } catch (err) {
+          console.error("Erreur lors de l'appel API :", err);
+          toast.error("Erreur lors de la récupération des données d'abonnement.");
+        }
+      }
+    };
+  
+    fetchSubscription();
+  }, [userInfo, getSubscription]);
+  
 
   // Fonction pour gérer la sélection d'un abonnement
   const handleSelectPlan = async (plan) => {
     setSelectedPlan(plan);
-  
-    // Création de l'objet d'abonnement avec date de fin et nombre d'entrées
+
     const newSubscription = {
-      name: userInfo.name || "Nom non disponible", // Fallback si name est undefined
-      mail: userInfo.email || "Email non disponible", // Fallback si email est undefined
+      name: userInfo.name || "Nom non disponible",
+      mail: userInfo.email || "Email non disponible",
       subscription: plan,
       end_date: calculateEndDate(plan),
-      entrance: 0, // Utilisation de entranceValue calculé
+      entrance: 0,
     };
-  
-    // Appel à la mutation pour mettre à jour les données d'abonnement de l'utilisateur
+
     try {
       const result = await updateSubscription(newSubscription).unwrap();
-      toast.success("Nouvelle abonnement mise à jour");
+      toast.success("Nouvel abonnement mis à jour");
     } catch (err) {
       toast.error("Erreur lors de la mise à jour de l'abonnement:");
     }
-  
-    // Affichage en console de l'abonnement sélectionné avec les données supplémentaires
-    // console.log("Nouvel abonnement sélectionné:", newSubscription);
   };
 
   return (
     <Container className="text-center mt-5">
       <h1>Choisissez votre abonnement</h1>
+      {isLoading && <p>Chargement des données d'abonnement...</p>}
+      {isError && <p>Erreur lors du chargement des données : {error?.data?.message}</p>}
+      {subscriptionData && (
+        <div className="mt-4">
+          <h3>Votre abonnement actuel :</h3>
+          <p>Type : {subscriptionData.subscription}</p>
+          <p>Date de fin : {new Date(subscriptionData.end_date).toLocaleDateString()}</p>
+        </div>
+      )}
       <Row className="mt-4">
         <Col md={4}>
           <SubscriptionCard
