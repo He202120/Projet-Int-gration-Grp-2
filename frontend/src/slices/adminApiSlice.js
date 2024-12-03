@@ -10,6 +10,7 @@ import {
     ADMIN_UPDATE_USER_URL,
     ADMIN_DELETE_USER_URL,
     ADMIN_USERS_DATA_GET_URL,
+    ADMIN_PARKINGS_DATA_GET_URL
 } from '../utils/constants.js';
 
 
@@ -106,7 +107,16 @@ export const adminApiSlice = apiSlice.injectEndpoints({
                 body: data
             })
 
-        })
+        }),
+
+        getParkingsAllData: builder.mutation({
+
+            query: () => ({
+                url: ADMIN_PARKINGS_DATA_GET_URL,
+                method: 'POST'
+            })
+
+        }),
 
     })
 })
@@ -123,4 +133,5 @@ export const {
     useUpdateUserByAdminMutation,
     useDeleteUserMutation,
     useGetUsersAllDataMutation,
+    useGetParkingsAllDataMutation,
 } = adminApiSlice;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { useGetUsersAllDataMutation } from "../../slices/adminApiSlice";
+import { useGetUsersAllDataMutation, useGetParkingsAllDataMutation } from "../../slices/adminApiSlice";
 import Loader from "../../components/Loader";
 
 const CarPlatesList = () => {
@@ -11,11 +11,13 @@ const CarPlatesList = () => {
     const [isAscendingName, setIsAscendingName] = useState(true);
     // État pour stocker les informations des utilisateurs
     const [usersData, setUsersData] = useState([]);
+    const [parkingsData, setParkingsData] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
 
     // API users data
     const [getUsersData] = useGetUsersAllDataMutation();
+    const [getParkingsData] = useGetParkingsAllDataMutation();
 
     useEffect(() => {
         const fetchUsersData = async () => {
@@ -30,9 +32,23 @@ const CarPlatesList = () => {
                 setIsLoading(false);
             }
         };
-
         fetchUsersData();
-    }, [getUsersData]);
+
+        const fetchParkingsData = async () => {
+            setIsLoading(true);
+            try {
+                const response = await getParkingsData();
+                const data = response.data.parkingsData;
+                setParkingsData(data);  // Mise à jour des données parkings
+            } catch (error) {
+                toast.error("Erreur de récupération des parkings");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchParkingsData();
+
+    }, [getUsersData, getParkingsData]);
 
 
     const calculeHeure = (heureArrivee) => {
@@ -66,7 +82,8 @@ const CarPlatesList = () => {
     };
 
     // test debug
-    console.log(usersData);
+    //console.log(usersData);
+    console.log(parkingsData);
 
     // Test filtrer les utilisateurs avec num_parking ici 1
     const filteredUsers = usersData.filter(user => user.num_parking === 1);

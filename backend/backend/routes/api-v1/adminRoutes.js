@@ -12,6 +12,8 @@ import verifyAdmin from "../../middlewares/verifyAdminMiddleware.js";
 // ===================== Configuring Express Router =====================
 const router = express.Router();
 
+import {getParkingsData} from "../../controllers/parkingController.js";
+
 import {
   authAdmin,
   registerAdmin,
@@ -68,5 +70,7 @@ router.patch("/unblock-user", requireAuth, verifyAdmin, adminUserBlockingDataVal
 router.put("/update-user", requireAuth, verifyAdmin, adminUserUpdateDataValidation, validateRequest, updateUserData);
 
 router.post("/get-info-users", requireAuth, verifyAdmin, getAllUsersData);
+
+router.post("/get-parkings", requireAuth, verifyAdmin, getParkingsData);
 
 export default router;
