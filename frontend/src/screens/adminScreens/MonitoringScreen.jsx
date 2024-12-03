@@ -13,6 +13,10 @@ const CarPlatesList = () => {
     const [usersData, setUsersData] = useState([]);
     const [parkingsData, setParkingsData] = useState([]);
 
+    //num parking choisit
+    const [selectedParking, setSelectedParking] = useState(1);
+
+
     const [isLoading, setIsLoading] = useState(false);
 
     // API users data
@@ -81,18 +85,37 @@ const CarPlatesList = () => {
         setIsAscendingName(!isAscendingName);
     };
 
-    // test debug
-    //console.log(usersData);
-    console.log(parkingsData);
+    const handleParkingClick = (numParking) => {
+        setSelectedParking(numParking);
+        console.log(`Parking sélectionné : ${numParking}`);
+    };
+
 
     // Test filtrer les utilisateurs avec num_parking ici 1
-    const filteredUsers = usersData.filter(user => user.num_parking === 1);
+    const filteredUsers = usersData.filter(user => user.num_parking === selectedParking);
     const countUsersInParking = filteredUsers.length;
+
+    //const parkingChoisi = parkingsData.find(p => p.num_parking === selectedParking);
 
 
     return (
         <div>
-            <h1>Remplissage</h1>
+
+            <div style={{ marginBottom: "20px" }}>
+                <h2>Liste des parkings :</h2>
+                {parkingsData.map((parking, index) => (
+                    <Button
+                        key={index}
+                        variant="primary"
+                        style={{ margin: "5px" }}
+                        onClick={() => handleParkingClick(parking.num_parking)}
+                    >
+                        {parking.name}
+                    </Button>
+                ))}
+            </div>
+
+            <h1>Remplissage:</h1>
             <div>
                 <h1>{countUsersInParking}/50</h1>
             </div>
@@ -132,7 +155,7 @@ const CarPlatesList = () => {
                         </thead>
                         <tbody>
                         {usersData
-                            .filter(user => user.num_parking === 1) //attention test a changer apres
+                            .filter(user => user.num_parking === selectedParking) //attention test a changer apres
                             .map((user, index) => (
                                 <tr key={index}>
                                     <td>{user.plate}</td>
