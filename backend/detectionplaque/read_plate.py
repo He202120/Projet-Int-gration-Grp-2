@@ -36,7 +36,7 @@ def detect_and_read_plate(image_path):
         # Fusionner les résultats
         raw_plate_text = "".join(text_parts).replace(" ", "").upper()
 
-        # Ajouter un tiret entre lettres et chiffres
+        # Ajouter un tiret entre lettres et chiffres  
         plate_text = re.sub(r"([A-Z]+)(\d+)", r"\1-\2", raw_plate_text)
 
         print(f"Plaque détectée : {plate_text} (Précision : {prob * 100:.2f}%)")
@@ -49,14 +49,21 @@ def detect_and_read_plate(image_path):
 def check_plate_in_db(plate_text):
     # URL de l'API de vérification de la plaque
     url = 'http://localhost:5000/api/v1/check-plate'
-    
-    # Envoi de la requête POST au backend avec la plaque détectée
-    response = requests.post(url, json={'plate': plate_text})
-    
-    if response.status_code == 200:
-        print(f"Réponse du serveur : {response.json()['message']}")
-    else:
-        print(f"Erreur lors de la vérification de la plaque : {response.status_code}")
+
+    try:
+        # Envoi de la requête POST au backend avec la plaque détectée
+        response = requests.post(url, json={'plate': plate_text})
+        
+        # Gestion des réponses
+        if response.status_code == 200:
+            print(f"Succès : {response.json().get('message', 'Action réussie.')}")
+        elif response.status_code == 404:
+            print("Erreur : Plaque non trouvée dans la base de données.")
+        else:
+            print(f"Erreur lors de la vérification de la plaque : {response.status_code} - {response.text}")
+    except requests.exceptions.RequestException as e:
+        print(f"Erreur de connexion au serveur : {e}")
+
 
 if __name__ == "__main__":
-    detect_and_read_plate('C:\\integration\\Projet-Integration-Grp-2\\backend\\detectionplaque\\voiture.jpg')
+    detect_and_read_plate('C:\\integration\\Projet-Integration-Grp-2\\backend\\detectionplaque\\voiture9.jpeg')

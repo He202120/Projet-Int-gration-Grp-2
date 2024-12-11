@@ -57,6 +57,68 @@ const UsersDataTable = ({ users }) => {
     }
   };
 
+  const updateUserParkingStatus = async (userId, isInParking) => {
+    // 1. Mettre à jour l'état côté frontend (local)
+    setUsers((prevUsers) =>
+      prevUsers.map((user) =>
+        user._id === userId ? { ...user, parking: isInParking ? 1 : 0 } : user
+      )
+    );
+  
+    // 2. Envoyer la mise à jour au serveur
+    try {
+      const response = await fetch('/update-parking', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: userId,
+          parkingStatus: isInParking ? 1 : 0,
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (data.success) {
+        console.log('Mise à jour réussie');
+      } else {
+        toast.error('Erreur lors de la mise à jour du parking.');
+        // Restaurer l'état local en cas d'erreur
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user._id === userId ? { ...user, parking: isInParking ? 0 : 1 } : user
+          )
+        );
+      }
+    } catch (error) {
+      toast.error('Erreur réseau ou serveur.');
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === userId ? { ...user, parking: isInParking ? 0 : 1 } : user
+        )
+      );
+    }
+  };
+
+  function formatDate(dateString) {
+    if (!dateString) return "Non disponible"; // Si la date est absente
+    const options = { 
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit', 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    };
+    const date = new Date(dateString);
+    return date.toLocaleDateString('fr-FR', options); // Format français
+  }
+
+  const handlePlateDetection = (userId, plateDetected) => {
+    const isInParking = plateDetected; // Si la plaque est détectée, l'utilisateur est dans le parking
+    updateUserParkingStatus(userId, isInParking);
+  };
+
   const handleUnblock = async () => {
     try {
       const responseFromApiCall = await unblockUser({ userId: userIdToUnblock, name: userNameToUnblock, plate: userPlateToUnblock, email: userMailToUnblock, parking: userParkingToUnblock, subscription: userSubscriptionToUnblock, end_date: userEnd_dateToUnblock});
@@ -115,7 +177,7 @@ const UsersDataTable = ({ users }) => {
             <th>Accept User</th>
             <th>Parking now</th>
             <th>subscription</th>
-            <th>end_date</th>
+            <th>End subscription</th>
           </tr>
         </thead>
         <tbody>
@@ -170,7 +232,7 @@ const UsersDataTable = ({ users }) => {
                   </Button>
                 )}
               </td>
-              <td>{user.parking === 0 ? "pas dans un parking" : user.parking}</td>
+              <td>{user.parking === 1 ? "oui" : "non" }</td>
               <td>{user.subscription}</td>
               <td>{user.end_date}</td>
             </tr>

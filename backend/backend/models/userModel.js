@@ -26,6 +26,7 @@ const userSchema = mongoose.Schema({
     plate: {
         type: String,
         required: true,
+        unique: true,
     },
     telephone: {
         type: Number,
