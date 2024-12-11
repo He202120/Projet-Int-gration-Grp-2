@@ -24,7 +24,7 @@ const ParkingAccess = () => {
 
         const parkingsArray = responseFromApiCall.data.parkingsData;
 
-        //console.log(parkingsArray);
+        console.log(parkingsArray);
 
         for (let newparking of parkingsArray) {
           for (let oldparking of parkingsFilter) {
@@ -180,7 +180,7 @@ const ParkingAccess = () => {
 
     const intervalfilter = setInterval(() => {
       filterUpdate(); // Récupérer les données toutes les 5 secondes
-    }, 500); // 1000 millisecondes = 1 secondes
+    }, 1000); // 1000 millisecondes = 1 secondes
 
     return () => clearInterval(intervalfilter);
   }, [filterName, filterPlaces, filterType, parkingsData]);
@@ -216,8 +216,8 @@ const ParkingAccess = () => {
             ? calculateDistance(
                 userLocation.lat,
                 userLocation.lng,
-                marker.latitude,
-                marker.longitude
+                parseFloat(marker.latitude),
+                parseFloat(marker.longitude)
               ).toFixed(2)
             : "N/A"; // Distance will be "N/A" until user location is available
 
@@ -228,13 +228,14 @@ const ParkingAccess = () => {
               position={[marker.latitude, marker.longitude]}
             >
               <Popup>
-                <div style={{ width: "500px" }}>
-                  <h3>{marker.name}</h3>
+                <div style={{ width: "300px" }}>
+                  <h2>{marker.name}</h2>
                   <p>
                     <strong>Status:</strong> {statusParking(marker.places)}
                   </p>
                   <p>
-                    <strong>Places disponibles:</strong> {marker.places}
+                    <strong>Places disponibles:</strong> {marker.places} /{" "}
+                    {marker.max_places}
                   </p>
                   <p>
                     <strong>Distance de vous:</strong> {distance} km
