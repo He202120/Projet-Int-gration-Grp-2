@@ -16,7 +16,8 @@ import {
   updateUser,
   blockUserHelper,
   unBlockUserHelper,
-  getUsers
+  getUsers,
+  getReview,
 } from "../utils/adminHelpers.js";
 
 const authAdmin = asyncHandler(async (req, res) => {
@@ -311,6 +312,21 @@ const getAllUsersData = asyncHandler(async (req, res) => {
 
 });
 
+const getAllReview = asyncHandler(async (req, res) => {
+  const usersData = await getReview();
+
+  if (usersData) {
+
+    res.status(200).json({ usersData });
+
+  } else {
+
+    throw new NotFoundError();
+
+  }
+
+});
+
 export {
   authAdmin,
   registerAdmin,
@@ -322,5 +338,6 @@ export {
   unBlockUser,
   updateUserData,
   deleteUserData,
-  getAllUsersData
+  getAllUsersData,
+  getAllReview
 };

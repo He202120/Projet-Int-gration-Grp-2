@@ -24,6 +24,7 @@ import {
   unBlockUser,
   deleteUserData,
   getAllUsersData,
+  getAllReview,
   
 } from "../../controllers/adminController.js";
 
@@ -68,5 +69,7 @@ router.patch("/unblock-user", requireAuth, verifyAdmin, adminUserBlockingDataVal
 router.put("/update-user", requireAuth, verifyAdmin, adminUserUpdateDataValidation, validateRequest, updateUserData);
 
 router.post("/get-info-users", requireAuth, verifyAdmin, getAllUsersData);
+
+router.post("/get-review", requireAuth, verifyAdmin, getAllReview);
 
 export default router;

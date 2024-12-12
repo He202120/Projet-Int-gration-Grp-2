@@ -55,10 +55,9 @@ const AdminHeader = () => {
                       Vue Parking
                     </Nav.Link>
                   </LinkContainer>
-                  <LinkContainer to="/admin/monitoring">
-                    <Nav.Link >
-                    Return Review
-                    </Nav.Link>
+                  
+                  <LinkContainer to="/admin/review">
+                     <Nav.Link>Avis Utilisateurs</Nav.Link>
                   </LinkContainer>
 
                   <NavDropdown title={adminInfo.name} id="userName">

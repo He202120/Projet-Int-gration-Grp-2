@@ -1,4 +1,5 @@
 import User from "../models/userModel.js";
+import Avis from "../models/avisModel.js";
 
 const fetchAllUsers = async () => {
   try {
@@ -120,6 +121,33 @@ const getUsers = async () => {
   }
 };
 
+const getReview = async (req, res) => {
+  try {
+    // Requête pour récupérer les avis
+    const dispAvis = await Avis.find(
+      {},
+      {
+        userId: 1,
+        rating: 1,
+        comment: 1,
+        createdAt: 1,
+      }
+    );
+
+    // Vérification si aucun avis n'est trouvé
+    if (dispAvis.length === 0) {
+      return res.status(404).json({ message: "No reviews found." });
+    }
+
+    // Retourne les avis trouvés
+    return res.status(200).json(dispAvis); // Ajout de la réponse avec les avis
+  } catch (error) {
+    // Gestion des erreurs
+    console.error("Error fetching reviews:", error);
+    return res.status(500).json({ message: "Error retrieving reviews." });
+  }
+};
+
 //ajout martin
 
-export { fetchAllUsers, blockUserHelper, unBlockUserHelper, updateUser, getUsers };
+export { fetchAllUsers, blockUserHelper, unBlockUserHelper, updateUser, getUsers,getReview };

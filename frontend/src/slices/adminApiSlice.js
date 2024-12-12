@@ -10,6 +10,8 @@ import {
     ADMIN_UPDATE_USER_URL,
     ADMIN_DELETE_USER_URL,
     ADMIN_USERS_DATA_GET_URL,
+    ADMIN_REVIEW_DATA_URL,
+    // ADMIN_DELETE_AVIS_URL,
 } from '../utils/constants.js';
 
 
@@ -106,9 +108,28 @@ export const adminApiSlice = apiSlice.injectEndpoints({
                 body: data
             })
 
-        })
+        }),
+        getReviewsData: builder.mutation({  
+            query: () => ({
+                url: ADMIN_REVIEW_DATA_URL,
+                method: 'POST',
+            })
+
+        }),
+
+    // // DeleteAvis: builder.mutation({
+        
+    // //     query: (data) => ({
+    // //         url: ADMIN_DELETE_AVIS_URL,
+    // //         method: 'DELETE',
+    // //         body: data
+    // //     })
+
+    // }),
 
     })
+    
+    
 })
 
 export const {
@@ -123,4 +144,6 @@ export const {
     useUpdateUserByAdminMutation,
     useDeleteUserMutation,
     useGetUsersAllDataMutation,
+    useGetReviewsDataMutation,
+    // useDeleteAvisMutation,
 } = adminApiSlice;
