@@ -302,8 +302,15 @@ const addParking = asyncHandler(async (req, res) => {
      # Access: PRIVATE
     */
 
-  const { name, email, telephone, longitude, latitude, places, max_places } =
-    req.body;
+  const {
+    name,
+    email,
+    contact,
+    longitude,
+    latitude,
+    max_places,
+    reduced_mobility_spots,
+  } = req.body;
 
   // Check if parking already exist
   const parkingExists = await Parking.findOne({ name });
@@ -320,11 +327,11 @@ const addParking = asyncHandler(async (req, res) => {
     const parking = await Parking.create({
       name: name,
       email: email,
-      telephone: telephone,
+      contact: contact,
       longitude: longitude,
       latitude: latitude,
-      places: places,
       max_places: max_places,
+      reduced_mobility_spots: reduced_mobility_spots,
     });
 
     res.status(201).json();

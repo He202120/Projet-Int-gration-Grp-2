@@ -23,13 +23,11 @@ const getParkings = async () => {
       {
         name: 1,
         email: 1,
-        telephone: 1,
+        contact: 1,
         longitude: 1,
         latitude: 1,
-        places: 1,
         max_places: 1,
-        completion: 1,
-        num_parking: 1,
+        reduced_mobility_spots: 1,
       }
     );
 

@@ -11,7 +11,7 @@ const parkingSchema = mongoose.Schema(
       required: true,
       unique: true,
     },
-    telephone: {
+    contact: {
       type: Number,
       required: true,
     },
@@ -31,14 +31,9 @@ const parkingSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    completion: {
+    reduced_mobility_spots: {
       type: Number,
-      default: 0,
-    },
-    // a changer !!!!!!
-    num_parking: {
-      type: Number,
-      default: 0,
+      required: true,
     },
   },
 
