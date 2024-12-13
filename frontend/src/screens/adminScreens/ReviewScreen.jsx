@@ -9,27 +9,25 @@ import StarRating from "../../components/StarRating";
 import { Link } from 'react-router-dom';  // Ajoutez cette ligne
 
 const ReviewScreen = () => {
-  const [avisList, setAvisList] = useState([]); // Liste des avis
-  const [isLoadingAvis, setIsLoadingAvis] = useState(false); // Gérer le chargement des avis
+  const [avisList, setAvisList] = useState([]); 
+  const [isLoadingAvis, setIsLoadingAvis] = useState(false); 
 
-  const navigate = useNavigate(); // Redirection
-  const { userInfo } = useSelector((state) => state.auth); // Récupérer l'utilisateur connecté
+  const navigate = useNavigate(); 
+  const { userInfo } = useSelector((state) => state.auth); 
 
-  const [getReview] = useGetReviewsDataMutation(); // Mutation pour récupérer les avis
-
+  const [getReviewsData] = useGetReviewsDataMutation(); 
   useEffect(() => {
-    if (!userInfo) {
-      // navigate("/login"); // Redirection si l'utilisateur n'est pas connecté
-    } else {
-      fetchAvis(); // Récupération des avis si connecté
-    }
+    
+      fetchAvis(); 
+    
   }, [navigate, userInfo]);
 
   const fetchAvis = async () => {
-    setIsLoadingAvis(true); // Lancer le chargement des avis
+    setIsLoadingAvis(true); 
     try {
-      const responseFromApiCall = await getReview(); // Appel API
-      const responses = responseFromApiCall.data?.avisData || [];
+      const responseFromApiCall = await getReviewsData(); // Appel API
+      const responses = responseFromApiCall.data?.usersData || [];
+  
       setAvisList(responses); // Mettre à jour la liste des avis
     } catch (err) {
       console.error(err);
@@ -63,7 +61,7 @@ const ReviewScreen = () => {
       {/* Lien pour retourner à l'accueil */}
       <Row className="py-3">
         <Col>
-          <Link to="/">Retour à l'accueil</Link>
+          <Link to="/admin/login">Retour à l'accueil</Link>
         </Col>
       </Row>
     </div>

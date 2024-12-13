@@ -140,7 +140,7 @@ const getReview = async (req, res) => {
     }
 
     // Retourne les avis trouvés
-    return res.status(200).json(dispAvis); // Ajout de la réponse avec les avis
+    return dispAvis; // Ajout de la réponse avec les avis
   } catch (error) {
     // Gestion des erreurs
     console.error("Error fetching reviews:", error);
