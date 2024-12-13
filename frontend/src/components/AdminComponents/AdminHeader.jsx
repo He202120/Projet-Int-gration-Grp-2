@@ -54,10 +54,9 @@ const AdminHeader = () => {
                     <Nav.Link>Vue Parking</Nav.Link>
                   </LinkContainer>
                   <LinkContainer to="/admin/monitoring">
-                    <Nav.Link>Return Review</Nav.Link>
-                  </LinkContainer>
-                  <LinkContainer to="/admin/handle">
-                    <Nav.Link>Gestion des parkings</Nav.Link>
+                    <Nav.Link >
+                    Return Review
+                    </Nav.Link>
                   </LinkContainer>
 
                   <NavDropdown title={adminInfo.name} id="userName">

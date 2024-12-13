@@ -22,6 +22,7 @@ import {
   blockUserHelper,
   unBlockUserHelper,
   getUsers,
+  getReview,
 } from "../utils/adminHelpers.js";
 
 const authAdmin = asyncHandler(async (req, res) => {
@@ -292,63 +293,24 @@ const getAllUsersData = asyncHandler(async (req, res) => {
     res.status(200).json({ usersData });
   } else {
     throw new NotFoundError();
+
   }
+
 });
 
-const addParking = asyncHandler(async (req, res) => {
-  /*
-     # Desc: Register new parking
-     # Route: POST /api/v1/admin/parking
-     # Access: PRIVATE
-    */
+const getAllReview = asyncHandler(async (req, res) => {
+  const usersData = await getReview();
 
-  const { name, email, telephone, longitude, latitude, places, max_places } =
-    req.body;
+  if (usersData) {
 
-  // Check if parking already exist
-  const parkingExists = await Parking.findOne({ name });
+    res.status(200).json({ usersData });
 
-  const parkingEmailExists = await Parking.findOne({ email });
-
-  // If the parking already exists, throw an error
-  if (parkingExists || parkingEmailExists) {
-    throw new BadRequestError("Parking name or email is already registered.");
-  }
-
-  // Store the user data to DB if the user dosen't exist already.
-  try {
-    const parking = await Parking.create({
-      name: name,
-      email: email,
-      telephone: telephone,
-      longitude: longitude,
-      latitude: latitude,
-      places: places,
-      max_places: max_places,
-    });
-
-    res.status(201).json();
-  } catch (error) {
-    console.log("Une erreur est survenue : " + error);
-  }
-});
-
-const deleteParking = asyncHandler(async (req, res) => {
-  const parkingId = req.body.parkingId;
-
-  if (!parkingId) {
-    throw new BadRequestError(
-      "UserId not received in request - User blocking failed."
-    );
-  }
-
-  const deletedParking = await Parking.findByIdAndDelete(parkingId);
-
-  if (deletedParking) {
-    res.status(200).json({ message: "Parking deleted successfully." });
   } else {
-    throw new BadRequestError("Parking not found or already deleted.");
+
+    throw new NotFoundError();
+
   }
+
 });
 
 export {
@@ -363,6 +325,5 @@ export {
   updateUserData,
   deleteUserData,
   getAllUsersData,
-  addParking,
-  deleteParking,
+  getAllReview
 };

@@ -1,19 +1,18 @@
 import { apiSlice } from "./apiSlice";
-import {
-  ADMIN_AUTHENTICATION_URL,
-  ADMIN_LOGOUT_URL,
-  ADMIN_REGISTRATION_URL,
-  ADMIN_PROFILE_URL,
-  ADMIN_USERS_DATA_FETCH_URL,
-  ADMIN_BLOCK_USER_URL,
-  ADMIN_UNBLOCK_USER_URL,
-  ADMIN_UPDATE_USER_URL,
-  ADMIN_DELETE_USER_URL,
-  ADMIN_USERS_DATA_GET_URL,
-  ADMIN_PARKINGS_DATA_GET_URL,
-  ADMIN_ADD_PARKING,
-  ADMIN_DELETE_PARKING,
-} from "../utils/constants.js";
+import { 
+    ADMIN_AUTHENTICATION_URL,
+    ADMIN_LOGOUT_URL,
+    ADMIN_REGISTRATION_URL,
+    ADMIN_PROFILE_URL,
+    ADMIN_USERS_DATA_FETCH_URL,
+    ADMIN_BLOCK_USER_URL,
+    ADMIN_UNBLOCK_USER_URL,
+    ADMIN_UPDATE_USER_URL,
+    ADMIN_DELETE_USER_URL,
+    ADMIN_USERS_DATA_GET_URL,
+} from '../utils/constants.js';
+
+
 
 export const adminApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -79,50 +78,29 @@ export const adminApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-    DeleteUser: builder.mutation({
-      query: (data) => ({
-        url: ADMIN_DELETE_USER_URL,
-        method: "DELETE",
-        body: data,
-      }),
-    }),
+        DeleteUser: builder.mutation({
+            
+            query: (data) => ({
+                url: ADMIN_DELETE_USER_URL,
+                method: 'DELETE',
+                body: data
+            })
 
-    getParkingsAllData: builder.mutation({
-      query: () => ({
-        url: ADMIN_PARKINGS_DATA_GET_URL,
-        method: "POST",
-      }),
-    }),
+        })
 
-    addParking: builder.mutation({
-      query: (data) => ({
-        url: ADMIN_ADD_PARKING,
-        method: "POST",
-        body: data,
-      }),
-    }),
-    DeleteParking: builder.mutation({
-      query: (data) => ({
-        url: ADMIN_DELETE_PARKING,
-        method: "DELETE",
-        body: data,
-      }),
-    }),
-  }),
-});
+    })
+})
 
 export const {
-  useAdminLoginMutation,
-  useAdminLogoutMutation,
-  useAdminRegisterMutation,
-  useUpdateAdminMutation,
-  useGetUsersDataMutation,
-  useBlockUserMutation,
-  useUnblockUserMutation,
-  useUpdateUserByAdminMutation,
-  useDeleteUserMutation,
-  useGetUsersAllDataMutation,
-  useGetParkingsAllDataMutation,
-  useAddParkingMutation,
-  useDeleteParkingMutation,
+
+    useAdminLoginMutation,
+    useAdminLogoutMutation,
+    useAdminRegisterMutation,
+    useUpdateAdminMutation,
+    useGetUsersDataMutation,
+    useBlockUserMutation,
+    useUnblockUserMutation,
+    useUpdateUserByAdminMutation,
+    useDeleteUserMutation,
+    useGetUsersAllDataMutation,
 } = adminApiSlice;
