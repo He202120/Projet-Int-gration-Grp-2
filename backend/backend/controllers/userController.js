@@ -235,8 +235,8 @@ const get_Abonnement = asyncHandler(async (req, res) => {
   */
 
   // Récupérer l'email de l'objet reçu dans la requête
-  const email = req.body.email; 
-  
+  const email = req.body.email;
+
   if (!email) {
     throw new BadRequestError("Email is required.");
   }
@@ -246,9 +246,10 @@ const get_Abonnement = asyncHandler(async (req, res) => {
 
   if (user) {
     // Retourner toutes les données de l'utilisateur
-    res.status(200).json({     
+    res.status(200).json({
       subscription: user.subscription,
-      end_date: user.end_date,}); // Envoyer l'objet utilisateur entier
+      end_date: user.end_date,
+    }); // Envoyer l'objet utilisateur entier
   } else {
     throw new BadRequestError("User not found.");
   }
@@ -256,33 +257,33 @@ const get_Abonnement = asyncHandler(async (req, res) => {
 
 /********************************add wilfried************************************************* */
 const registerAvis = asyncHandler(async (req, res) => {
-  const {userId, rating, comment } = req.body;
+  const { userId, rating, comment } = req.body;
 
   // Validation des champs requis
   if (!userId || !rating || !comment) {
-      res.status(400);
-      throw new Error('Tous les champs obligatoires (rating, comment) doivent être renseignés.');
+    res.status(400);
+    throw new Error(
+      "Tous les champs obligatoires (rating, comment) doivent être renseignés."
+    );
   }
 
   // Création d'un nouvel avis
   try {
     const newReview = await Avis.create({
-        userId: userId,
-        rating: rating,
-        comment: comment
-      });
+      userId: userId,
+      rating: rating,
+      comment: comment,
+    });
 
-      res.status(201).json({
-          message: 'Avis ajouté avec succès',
-          review: newReview
-      });
+    res.status(201).json({
+      message: "Avis ajouté avec succès",
+      review: newReview,
+    });
   } catch (error) {
-      res.status(500);
-      throw new Error('Erreur lors de l\'ajout de l\'avis : ' + error.message);
+    res.status(500);
+    throw new Error("Erreur lors de l'ajout de l'avis : " + error.message);
   }
 });
-
-
 
 export {
   authUser,

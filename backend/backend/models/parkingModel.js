@@ -23,10 +23,6 @@ const parkingSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    places: {
-      type: Number,
-      required: true,
-    },
     max_places: {
       type: Number,
       required: true,
