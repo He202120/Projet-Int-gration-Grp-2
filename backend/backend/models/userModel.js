@@ -52,8 +52,9 @@ const userSchema = mongoose.Schema({
         default: null
     },
     requires_accessible_parking: {
-        type: Boolean,
-        default: false,
+        type: mongoose.Schema.Types.ObjectId, // FK vers Subscription
+        ref: "Subscription", // Nom du modèle cible
+        default: null, // Aucune souscription par défaut
     }
 
 },{
