@@ -28,7 +28,7 @@ import {
 } from "./backendDataValidationConfig.js";
 import { multerUploadUserProfile } from "../../config/multerConfig.js";
 
-import {add_avisDataValidation} from "./backendDataValidationConfig.js"
+import { add_avisDataValidation } from "./backendDataValidationConfig.js";
 // ===================== Configuring Express Router =====================
 const router = express.Router();
 
@@ -43,8 +43,14 @@ router.post("/auth", userSignInDataValidation, validateRequest, authUser);
 router.post("/logout", logoutUser);
 
 // Route pour l'ajout d'un avis
-router.put("/avis", add_avisDataValidation, requireAuth, verifyUser, registerAvis);
-router.post("/get_avis", requireAuth, verifyUser, getAllAvis)
+router.put(
+  "/avis",
+  add_avisDataValidation,
+  requireAuth,
+  verifyUser,
+  registerAvis
+);
+router.post("/get_avis", requireAuth, verifyUser, getAllAvis);
 
 //* ==================== User Profile Routes ====================
 

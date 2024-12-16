@@ -44,11 +44,11 @@ const HandleParking = () => {
   //Pour le formulaire
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [telephone, setPhone] = useState(0);
+  const [contact, setPhone] = useState(0);
   const [longitude, setLongitude] = useState("");
   const [latitude, setLatitude] = useState("");
-  const [places, setPlaces] = useState(0);
   const [max_places, setMaxPlaces] = useState(0);
+  const [reduced_mobility_spots, setReduced] = useState(0);
 
   //Obtenir les données pour afficher
   useEffect(() => {
@@ -90,11 +90,11 @@ const HandleParking = () => {
     var data = {
       name,
       email,
-      telephone,
+      contact,
       longitude,
       latitude,
-      places,
       max_places,
+      reduced_mobility_spots,
     };
     try {
       const responseFromApiCall = await register(data).unwrap();
@@ -106,8 +106,8 @@ const HandleParking = () => {
       setPhone(0);
       setLongitude("");
       setLatitude("");
-      setPlaces(0);
       setMaxPlaces(0);
+      setReduced(0);
       setTabs("Liste");
     } catch (err) {
       toast.error(err?.data?.errors[0]?.message || err?.error);
@@ -120,8 +120,8 @@ const HandleParking = () => {
     { field: "name", headerName: "Alias", width: 200 },
     { field: "email", headerName: "E-mail", width: 275 },
     {
-      field: "telephone",
-      headerName: "Numéro",
+      field: "contact",
+      headerName: "Contact",
       type: "number",
       width: 150,
     },
@@ -244,7 +244,7 @@ const HandleParking = () => {
           </div>
         )}
         {tabs === "Ajouter" && (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="formadd">
             <h2 className="encoderTitle">Encoder</h2>
             <hr />
             <label>
@@ -268,10 +268,10 @@ const HandleParking = () => {
             </label>
             <br />
             <label>
-              Téléphone:
+              Contact:
               <input
                 type="number"
-                value={telephone}
+                value={contact}
                 onChange={(e) => {
                   if (isNaN(e.target.value)) {
                     setPhone(0);
@@ -304,13 +304,24 @@ const HandleParking = () => {
             </label>
             <br />
             <label>
-              Nombre maximum de lieux:
+              Nombre maximum de places:
               <input
                 type="number"
                 value={max_places}
                 onChange={(e) => {
-                  setMaxPlaces(parseInt(e.target.value)),
-                    setPlaces(parseInt(e.target.value));
+                  setMaxPlaces(parseInt(e.target.value));
+                }}
+                required
+              />
+            </label>
+            <br />
+            <label>
+              Nombre maximum de places à mobilité réduites:
+              <input
+                type="number"
+                value={reduced_mobility_spots}
+                onChange={(e) => {
+                  setReduced(parseInt(e.target.value));
                 }}
                 required
               />
