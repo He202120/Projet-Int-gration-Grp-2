@@ -36,8 +36,8 @@ const userSchema = mongoose.Schema({
         required: true,
     },
     parking_id: {
-        type: Number,
-        default: 0,
+        type: String,
+        default: "0",
     },
     type_subscription: {
         type: String,

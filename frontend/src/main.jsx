@@ -71,6 +71,8 @@ const router = createBrowserRouter(
         <Route path="/admin/manage-users" element={<UsersManagementScreen />} />
         <Route path="/admin/monitoring" element={<MonitoringScreen />} />
         <Route path="/admin/handle" element={<HandleParking />} />
+        <Route path="/admin/sub" element={<HandleParking />} />
+
         {/* <Route path="/admin/review" element={<ReviewScreen />} /> */}
       </Route>
     </Route>
