@@ -7,12 +7,14 @@ const fetchAllUsers = async () => {
       {},
       {
         name: 1,
+        firstname: 1,
         email: 1,
         blocked: 1,
         plate: 1,
-        parking: 1,
-        subscription: 1,
-        end_date: 1,
+        parking_id: 1,
+        type_subscription: 1,
+        subscription_end_date: 1,
+        arrival_time: 1,
       }
     );
 
@@ -103,12 +105,10 @@ const getUsers = async () => {
           blocked: 1,
           plate: 1,
           telephone: 1,
-          parking: 1,
-          subscription: 1,
-          end_date: 1,
-          entrance: 1,
-          arrival: 1,
-          num_parking: 1,
+          parking_id: 1,
+          type_subscription: 1,
+          subscription_end_date: 1,
+          arrival_time: 1,
         }
     );
 
@@ -124,20 +124,21 @@ const getReview = async (req, res) => {
   try {
     // Requête pour récupérer les avis
     const dispAvis = await Avis.find(
+
       {},
+      
       {
         userId: 1,
         rating: 1,
         comment: 1,
         createdAt: 1,
       }
+    
     );
-
     // Vérification si aucun avis n'est trouvé
     if (dispAvis.length === 0) {
       return res.status(404).json({ message: "No reviews found." });
     }
-
     // Retourne les avis trouvés
     return dispAvis; // Ajout de la réponse avec les avis
   } catch (error) {

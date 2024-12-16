@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useGetReviewsDataMutation } from "../../slices/adminApiSlice";
 import Loader from "../../components/Loader";
 import StarRating from "../../components/StarRating";
-import { Link } from 'react-router-dom';  // Ajoutez cette ligne
+import { Link } from 'react-router-dom';  
 
 const ReviewScreen = () => {
   const [avisList, setAvisList] = useState([]); 
@@ -32,7 +32,7 @@ const ReviewScreen = () => {
     } catch (err) {
       console.error(err);
     } finally {
-      setIsLoadingAvis(false); // Terminer le chargement des avis
+      setIsLoadingAvis(false); 
     }
   };
 
@@ -44,7 +44,7 @@ const ReviewScreen = () => {
       {isLoadingAvis ? (
         <Loader />
       ) : avisList.length === 0 ? (
-        <p>Aucun avis pour le moment.</p> // Message si aucun avis disponible
+        <p>Aucun avis pour le moment.</p> 
       ) : (
         <ListGroup>
           {avisList.map((avis, index) => (

@@ -7,6 +7,10 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    firstname: {
+        type: String,
+        required: true
+    },
     email: {
         type: String,
         required: true,
@@ -31,27 +35,26 @@ const userSchema = mongoose.Schema({
         type: Number,
         required: true,
     },
-    parking: {
+    parking_id: {
         type: Number,
-        required: true,
+        default: 0,
     },
-    subscription: {
+    type_subscription: {
         type: String,
+        default: null,
     },
-    end_date: {
+    subscription_end_date: {
         type: Date,
+        default: null,
     },
-    entrance: {
-        type: Number,
-    },
-    arrival: {
+    arrival_time: {
         type: Date,
         default: null
     },
-    num_parking: {
-        type: Number,
-        default: 0
-    },
+    requires_accessible_parking: {
+        type: Boolean,
+        default: false,
+    }
 
 },{
 

@@ -26,7 +26,9 @@ import {
   unBlockUser,
   deleteUserData,
   getAllUsersData,
-  
+  getAllReview,
+  addParking,
+  deleteParking,
 } from "../../controllers/adminController.js";
 
 // Data validation configuration
@@ -96,4 +98,19 @@ router.put(
 
 router.post("/get-info-users", requireAuth, verifyAdmin, getAllUsersData);
 
+router.post("/get-review", requireAuth, verifyAdmin, getAllReview);
+
+router.post("/get-parkings", requireAuth, verifyAdmin, getParkingsData);
+
+//* ===================== Parking Management Routes ==================
+
+router.post("/add-parking", requireAuth, verifyAdmin, addParking);
+
+router.delete(
+  "/delete-parking",
+  requireAuth,
+  verifyAdmin,
+  validateRequest,
+  deleteParking
+);
 export default router;
