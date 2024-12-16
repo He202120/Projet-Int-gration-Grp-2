@@ -23,6 +23,7 @@ const getParkings = async () => {
     const parkings = await Parking.find(
       {},
       {
+        _id: 1,
         name: 1,
         email: 1,
         contact: 1,

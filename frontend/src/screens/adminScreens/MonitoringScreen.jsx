@@ -85,17 +85,19 @@ const CarPlatesList = () => {
         setIsAscendingName(!isAscendingName);
     };
 
-    const handleParkingClick = (numParking) => {
-        setSelectedParking(numParking);
-        console.log(`Parking sélectionné : ${numParking}`);
+    const handleParkingClick = (idParking) => {
+        setSelectedParking(idParking);
+        console.log(`Parking sélectionné : ${idParking}`);
     };
 
 
-    // Test filtrer les utilisateurs avec num_parking ici 1
-    const filteredUsers = usersData.filter(user => user.num_parking === selectedParking);
+    // Test filtrer les utilisateurs avec parking ici 1
+    const filteredUsers = usersData.filter(user => user.parking === selectedParking);
     const countUsersInParking = filteredUsers.length;
 
-    //const parkingChoisi = parkingsData.find(p => p.num_parking === selectedParking);
+    //const parkingChoisi = parkingsData.find(p => p.parking === selectedParking);
+
+    console.log(parkingsData)
 
 
     return (
@@ -108,7 +110,7 @@ const CarPlatesList = () => {
                         key={index}
                         variant="primary"
                         style={{ margin: "5px" }}
-                        onClick={() => handleParkingClick(parking.num_parking)}
+                        onClick={() => handleParkingClick(parking._id)}
                     >
                         {parking.name}
                     </Button>
@@ -155,7 +157,7 @@ const CarPlatesList = () => {
                         </thead>
                         <tbody>
                         {usersData
-                            .filter(user => user.num_parking === selectedParking) //attention test a changer apres
+                            .filter(user => user.parking === selectedParking) //attention test a changer apres
                             .map((user, index) => (
                                 <tr key={index}>
                                     <td>{user.plate}</td>
