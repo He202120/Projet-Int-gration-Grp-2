@@ -11,6 +11,10 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    firstname: {
+        type: String,
+        required: true
+    },
     email: {
       type: String,
       required: true,
@@ -36,27 +40,32 @@ const userSchema = mongoose.Schema(
       required: true,
     },
     parking_id: {
-      type: String,
-      required: true,
+        type: String,
+        default: "0",
     },
     type_subscription: {
-      type: String,
+        type: String,
+        default: null,
     },
     subscription_end_date: {
-      type: Date,
+        type: Date,
+        default: null,
     },
     arrival_time: {
-      type: Date,
-      default: null,
+        type: Date,
+        default: null
     },
     requires_accessible_parking: {
-      type: Boolean,
-    },
-  },
-  {
-    timestamps: true, // This will automatically add timestamps for any operations done.
-  }
-);
+        type: Boolean,
+        default: false,
+    }
+
+},{
+
+    timestamps: true // This will automatically add timestamps for any operations done.
+
+});
+
 
 // ============= Password Hashing Middleware =============
 userSchema.pre("save", async function (next) {

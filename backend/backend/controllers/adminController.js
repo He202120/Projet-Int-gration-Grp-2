@@ -76,7 +76,7 @@ const registerAdmin = asyncHandler(async (req, res) => {
      # Access: PUBLIC
     */
 
-  const { name, email, password, adminRegistrationKey } = req.body;
+  const { name, firstname, email, password, adminRegistrationKey } = req.body;
 
   if (!email || !password) {
     // If email or password is empty, return error
@@ -108,6 +108,7 @@ const registerAdmin = asyncHandler(async (req, res) => {
   // Store the user data to DB if the user dosen't exist already.
   const user = await AdminModel.create({
     name: name,
+    firstname: firstname,
     email: email,
     password: password,
   });

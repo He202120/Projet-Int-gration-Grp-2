@@ -3,10 +3,10 @@
 import jwt from 'jsonwebtoken';
 
 
-const generateAuthToken = (res, userId, userEmail) => {
+const generateAuthToken = (res, userId, userEmail, userPlate) => {
 
     // Creating a new json webtoken with userId and secret key
-    const jwtToken = jwt.sign({id: userId, email: userEmail}, process.env.JWT_KEY, { expiresIn: process.env.JWT_TOKEN_DURATION } );
+    const jwtToken = jwt.sign({id: userId, email: userEmail, plate: userPlate}, process.env.JWT_KEY, { expiresIn: process.env.JWT_TOKEN_DURATION } );
 
     const cookieOptions = {
 

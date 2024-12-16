@@ -47,11 +47,12 @@ const authUser = asyncHandler(async (req, res) => {
 
     // If password verified and user is not-blocked, send response back with jwt token
 
-    generateAuthToken(res, user._id, user.email); // Middleware to Generate token and send it back in response object
+    generateAuthToken(res, user._id, user.email, user.plate); // Middleware to Generate token and send it back in response object
 
     let registeredUserData = {
       name: user.name,
       email: user.email,
+      plate: user.plate,
     };
 
     if (user.profileImageName) {
@@ -79,14 +80,16 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const {
     name,
+    firstname,
     email,
     password,
     plate,
     telephone,
-    parking,
-    subscription,
-    end_date,
-    entrance,
+    parking_id,
+    type_subscription,
+    subscription_end_date,
+    arrival_time,
+    requires_accessible_parking
   } = req.body;
 
   // Check if user already exist
@@ -100,14 +103,16 @@ const registerUser = asyncHandler(async (req, res) => {
   // Store the user data to DB if the user dosen't exist already.
   const user = await User.create({
     name: name,
+    firstname: firstname,
     email: email,
     password: password,
     plate: plate,
     telephone: telephone,
-    parking: 0,
-    subscription: null,
-    end_date: null,
-    entrance: null,
+    parking_id: parking_id,
+    type_subscription: type_subscription,
+    subscription_end_date: subscription_end_date,
+    arrival_time: arrival_time,
+    requires_accessible_parking: requires_accessible_parking
   });
 
   if (user) {
@@ -208,19 +213,16 @@ const update_Abonnement = asyncHandler(async (req, res) => {
 
   if (user) {
     // Update the user's subscription data (if provided in the request body)
-    user.subscription = req.body.subscription || user.subscription;
-    user.end_date = req.body.end_date || user.end_date;
-    user.entrance =
-      req.body.entrance !== undefined ? req.body.entrance : user.entrance;
+    user.type_subscription = req.body.type_subscription || user.type_subscription;
+    user.subscription_end_date = req.body.subscription_end_date || user.subscription_end_date;
 
     // Save the updated user data
     const updatedUserData = await user.save();
 
     // Send the response with the updated subscription data
     res.status(200).json({
-      subscription: updatedUserData.subscription,
-      end_date: updatedUserData.end_date,
-      entrance: updatedUserData.entrance,
+      type_subscription: updatedUserData.type_subscription,
+      subscription_end_date: updatedUserData.subscription_end_date,
     });
   } else {
     throw new BadRequestError("User not found.");
@@ -246,10 +248,9 @@ const get_Abonnement = asyncHandler(async (req, res) => {
 
   if (user) {
     // Retourner toutes les données de l'utilisateur
-    res.status(200).json({
-      subscription: user.subscription,
-      end_date: user.end_date,
-    }); // Envoyer l'objet utilisateur entier
+    res.status(200).json({     
+      type_subscription: user.type_subscription,
+      end_subscription_end_datedate: user.subscription_end_date,}); // Envoyer l'objet utilisateur entier
   } else {
     throw new BadRequestError("User not found.");
   }
