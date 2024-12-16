@@ -26,6 +26,7 @@ import {
   unBlockUser,
   deleteUserData,
   getAllUsersData,
+  getAllReview,
   addParking,
   deleteParking,
 } from "../../controllers/adminController.js";
@@ -97,6 +98,8 @@ router.put(
 
 router.post("/get-info-users", requireAuth, verifyAdmin, getAllUsersData);
 
+router.post("/get-review", requireAuth, verifyAdmin, getAllReview);
+
 router.post("/get-parkings", requireAuth, verifyAdmin, getParkingsData);
 
 //* ===================== Parking Management Routes ==================
@@ -110,5 +113,4 @@ router.delete(
   validateRequest,
   deleteParking
 );
-
 export default router;
