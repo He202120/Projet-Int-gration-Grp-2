@@ -16,6 +16,7 @@ import { PROFILE_IMAGE_DIR_PATH } from "../../utils/constants";
 const ProfileScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [plate, setPlate] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [profileImage, setProfileImage] = useState();
@@ -29,7 +30,8 @@ const ProfileScreen = () => {
   useEffect(() => {
     setName(userInfo.name);
     setEmail(userInfo.email);
-  }, [userInfo.name, userInfo.email]);
+    setPlate(userInfo.plate);
+  }, [userInfo.name, userInfo.email, userInfo.plate]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -42,6 +44,7 @@ const ProfileScreen = () => {
 
         formData.append("name", name);
         formData.append("email", email);
+        formData.append("plate", plate);
         formData.append("password", password);
         formData.append("profileImage", profileImage);
 
@@ -95,6 +98,16 @@ const ProfileScreen = () => {
             placeholder="Enter name here..."
             value={name}
             onChange={(e) => setName(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+
+        <Form.Group className="my-2" controlId="plate">
+          <Form.Label>Plate</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter plate here..."
+            value={plate}
+            onChange={(e) => setPlate(e.target.value)}
           ></Form.Control>
         </Form.Group>
 

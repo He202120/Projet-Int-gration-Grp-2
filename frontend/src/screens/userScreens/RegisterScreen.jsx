@@ -14,11 +14,13 @@ import Loader from "../../components/Loader";
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
+  const [firstname, setFirstname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [telephone, setTelephone] = useState("");
   const [plate, setPlate] = useState("");
+  const [requiresAccessibleParking, setRequiresAccessibleParking] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -42,10 +44,12 @@ const RegisterScreen = () => {
       try {
         const responseFromApiCall = await register({
           name,
+          firstname,
           email,
           password,
           telephone,
           plate,
+          requiresAccessibleParking
         }).unwrap();
         // Charlier Martin
         //dispatch(setCredentials({ ...responseFromApiCall }));
@@ -69,6 +73,16 @@ const RegisterScreen = () => {
             placeholder="Enter name here..."
             value={name}
             onChange={(e) => setName(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+
+        <Form.Group className="my-2" controlId="firstname">
+          <Form.Label>Firstname</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter firstname here..."
+            value={firstname}
+            onChange={(e) => setFirstname(e.target.value)}
           ></Form.Control>
         </Form.Group>
 
@@ -113,13 +127,22 @@ const RegisterScreen = () => {
         </Form.Group>
 
         <Form.Group className="my-2" controlId="plate">
-          <Form.Label>plate</Form.Label>
+          <Form.Label>Plate</Form.Label>
           <Form.Control
             type="text"
             placeholder="0-XXX-000"
             value={plate}
             onChange={(e) => setPlate(e.target.value)}
           ></Form.Control>
+        </Form.Group>
+
+        <Form.Group className="my-2" controlId="requires_accessible_parking">
+          <Form.Label>Accessible_Parking</Form.Label>
+          <Form.Check
+            type="checkbox"
+            checked={requiresAccessibleParking}
+            onChange={(e) => setRequiresAccessibleParking(e.target.checked)}
+          ></Form.Check>
         </Form.Group>
 
         <Button type="submit" variant="primary" className="mt-3">

@@ -6,12 +6,14 @@ const fetchAllUsers = async () => {
       {},
       {
         name: 1,
+        firstname: 1,
         email: 1,
         blocked: 1,
         plate: 1,
-        parking: 1,
-        subscription: 1,
-        end_date: 1,
+        parking_id: 1,
+        type_subscription: 1,
+        subscription_end_date: 1,
+        arrival_time: 1,
       }
     );
 
@@ -102,12 +104,10 @@ const getUsers = async () => {
           blocked: 1,
           plate: 1,
           telephone: 1,
-          parking: 1,
-          subscription: 1,
-          end_date: 1,
-          entrance: 1,
-          arrival: 1,
-          num_parking: 1,
+          parking_id: 1,
+          type_subscription: 1,
+          subscription_end_date: 1,
+          arrival_time: 1,
         }
     );
 
