@@ -15,6 +15,8 @@ const ParkingAccess = () => {
 
   const [parkingsFilter, setParkingsFilter] = useState([]);
 
+  const [takenParkings, setTakenParkings] = useState([]);
+
   const [parkingsDataFromAPI, { isLoading }] = useGetparkingMutation();
 
   useEffect(() => {
@@ -22,9 +24,17 @@ const ParkingAccess = () => {
       const fetchData = async () => {
         const responseFromApiCall = await parkingsDataFromAPI();
 
-        const parkingsArray = responseFromApiCall.data.parkingsData;
+        const parkingsArrays = responseFromApiCall.data.parkingsData;
 
-        console.log(parkingsArray);
+        //console.log(parkingsArrays);
+
+        const parkingsArray = parkingsArrays.parkingsReturn;
+
+        //console.log(parkingsArray);
+
+        setTakenParkings(parkingsArrays.usersReturn);
+
+        //console.log(takenParkings);
 
         for (let newparking of parkingsArray) {
           for (let oldparking of parkingsFilter) {
@@ -115,9 +125,17 @@ const ParkingAccess = () => {
     }
   }, []);
 
-  const getIcon = (parkingPlaces) => {
+  const getIcon = (parkingPlaces, id, max) => {
+    var takenPlaces = 0;
+    for (let taken of takenParkings) {
+      if (taken.parking == id) {
+        takenPlaces += 1;
+      }
+    }
+
     return new Icon({
-      iconUrl: parkingPlaces === 0 ? closeicon : openicon,
+      iconUrl:
+        parkingPlaces === 0 || max - takenPlaces === 0 ? closeicon : openicon,
       iconSize: [38, 38],
     });
   };
@@ -125,6 +143,7 @@ const ParkingAccess = () => {
   const filterOptions = [
     { key: "fhef638cfe", value: "All" },
     { key: "igjc7ejfnq", value: "Libre" },
+    { key: "dzdij5zdd2", value: "Handicap" },
     { key: "fefli76d0f", value: "Alias" },
   ];
 
@@ -154,6 +173,17 @@ const ParkingAccess = () => {
           if (parking.places >= filterPlaces && parking.places != 0) {
             update.push(parking);
           }
+          var takenPlaces = 0;
+          for (let taken of takenParkings) {
+            if (taken.parking == parking._id) {
+              takenPlaces += 1;
+            }
+          }
+          if (
+            parking.max_places > takenPlaces &&
+            parking.max_places >= filterPlaces
+          )
+            update.push(parking);
         }
         setParkingsFilter(update);
       } else if (filterType == "Alias") {
@@ -173,6 +203,12 @@ const ParkingAccess = () => {
           }
         }
         setParkingsFilter(update2);
+      } else if (filterType == "Handicap") {
+        var update3 = [];
+        for (let parking of parkingsData) {
+          if (parking.reduced_mobility_spots > 0) update3.push(parking);
+        }
+        setParkingsFilter(update3);
       } else {
         setParkingsFilter(parkingsData);
       }
@@ -183,7 +219,7 @@ const ParkingAccess = () => {
     }, 1000); // 1000 millisecondes = 1 secondes
 
     return () => clearInterval(intervalfilter);
-  }, [filterName, filterPlaces, filterType, parkingsData]);
+  }, [filterName, filterPlaces, filterType, parkingsData, takenParkings]);
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371; // Radius of the earth in km
@@ -199,8 +235,38 @@ const ParkingAccess = () => {
     return R * c; // Distance in km
   };
 
-  const statusParking = (places) => {
-    return places > 0 ? "Libre" : "Plein";
+  const statusParking = (places, id, max) => {
+    if (places == 0) {
+      return "Plein";
+    } else if (places > 0) {
+      return "Libre";
+    } else {
+      var takenPlaces = 0;
+      for (let taken of takenParkings) {
+        console.log(taken);
+        if (taken.parking === id) {
+          takenPlaces += 1;
+        }
+      }
+      if (max <= takenPlaces) {
+        return "Plein";
+      } else {
+        return "Libre";
+      }
+    }
+  };
+
+  const disponibility = (places, id, max_places) => {
+    if (places === undefined) {
+      var takenPlaces = 0;
+      for (let taken of takenParkings) {
+        if (taken.parking == id) {
+          takenPlaces += 1;
+        }
+      }
+      return max_places - takenPlaces + " / " + max_places;
+    }
+    return places + " / " + max_places;
   };
 
   return (
@@ -224,18 +290,31 @@ const ParkingAccess = () => {
           return (
             <Marker
               key={marker._id}
-              icon={getIcon(marker.places)}
+              icon={getIcon(marker.places, marker._id, marker.max_places)}
               position={[marker.latitude, marker.longitude]}
             >
               <Popup>
                 <div style={{ width: "300px" }}>
                   <h2>{marker.name}</h2>
                   <p>
-                    <strong>Status:</strong> {statusParking(marker.places)}
+                    <strong>Status:</strong>{" "}
+                    {statusParking(
+                      marker.places,
+                      marker._id,
+                      marker.max_places
+                    )}
                   </p>
                   <p>
-                    <strong>Places disponibles:</strong> {marker.places} /{" "}
-                    {marker.max_places}
+                    <strong>Places disponibles:</strong>{" "}
+                    {disponibility(
+                      marker.places,
+                      marker._id,
+                      marker.max_places
+                    )}
+                  </p>
+                  <p>
+                    <strong>Places Handicapé:</strong>{" "}
+                    {marker.reduced_mobility_spots}
                   </p>
                   <p>
                     <strong>Distance de vous:</strong> {distance} km

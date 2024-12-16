@@ -23,7 +23,7 @@ hr {
   width: 100%;
 }
 
-form {
+.formadd {
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
