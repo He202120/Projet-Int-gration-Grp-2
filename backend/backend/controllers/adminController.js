@@ -3,9 +3,14 @@
 // ===================== Importing necessary modules/files =====================
 import asyncHandler from "express-async-handler";
 import AdminModel from "../models/adminModel.js";
-import User from "../models/userModel.js"
+import User from "../models/userModel.js";
+import Parking from "../models/parkingModel.js";
 
-import { BadRequestError, NotAuthorizedError, NotFoundError } from "base-error-handler";
+import {
+  BadRequestError,
+  NotAuthorizedError,
+  NotFoundError,
+} from "base-error-handler";
 
 import generateAuthToken from "../utils/jwtHelpers/generateAuthToken.js";
 import destroyAuthToken from "../utils/jwtHelpers/destroyAuthToken.js";
@@ -18,6 +23,7 @@ import {
   unBlockUserHelper,
   getUsers,
   getReview,
+
 } from "../utils/adminHelpers.js";
 
 const authAdmin = asyncHandler(async (req, res) => {
@@ -30,10 +36,8 @@ const authAdmin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-
     // If email or password is empty, return error
     throw new BadRequestError("Email and password must be provided.");
-
   }
 
   // Find the user in Db with the email and password
@@ -61,7 +65,9 @@ const authAdmin = asyncHandler(async (req, res) => {
   if (!admin || !passwordValid) {
     // If user or user password is not valid, send error back
 
-    throw new BadRequestError("Invalid Email or Password - Admin authentication failed.");
+    throw new BadRequestError(
+      "Invalid Email or Password - Admin authentication failed."
+    );
   }
 });
 
@@ -72,26 +78,24 @@ const registerAdmin = asyncHandler(async (req, res) => {
      # Access: PUBLIC
     */
 
-  const { name, email, password, adminRegistrationKey } = req.body;
+  const { name, firstname, email, password, adminRegistrationKey } = req.body;
 
   if (!email || !password) {
-    
     // If email or password is empty, return error
-    throw new BadRequestError("Email or Password is missing in the request - Admin registration failed.");
+    throw new BadRequestError(
+      "Email or Password is missing in the request - Admin registration failed."
+    );
   }
 
   if (!adminRegistrationKey) {
-    
     // If adminRegistrationKey is empty, return error
-    throw new BadRequestError("No Admin Registration Access Code - Admin registration aborted.");
-    
+    throw new BadRequestError(
+      "No Admin Registration Access Code - Admin registration aborted."
+    );
   } else {
-    
     // Check if Admin registration key is valid
     if (process.env.ADMIN_REGISTRATION_KEY !== adminRegistrationKey) {
-
       throw new NotAuthorizedError();
-
     }
   }
 
@@ -100,14 +104,13 @@ const registerAdmin = asyncHandler(async (req, res) => {
 
   // If the user already exists, throw an error
   if (userExists) {
-
     throw new BadRequestError("Admin already exists.");
-
   }
 
   // Store the user data to DB if the user dosen't exist already.
   const user = await AdminModel.create({
     name: name,
+    firstname: firstname,
     email: email,
     password: password,
   });
@@ -124,12 +127,9 @@ const registerAdmin = asyncHandler(async (req, res) => {
 
     res.status(201).json(registeredUserData);
   } else {
-
     // If user was NOT Created, send error back
     throw new BadRequestError("Invalid data - Admin registration failed.");
-
   }
-  
 });
 
 const logoutAdmin = asyncHandler(async (req, res) => {
@@ -186,9 +186,7 @@ const updateAdminProfile = asyncHandler(async (req, res) => {
       name: updatedAdminData.name,
       email: updatedAdminData.email,
     });
-
   } else {
-
     // If requested admin was not found in db, return error
     throw new NotFoundError();
   }
@@ -198,40 +196,37 @@ const getAllUsers = asyncHandler(async (req, res) => {
   const usersData = await fetchAllUsers();
 
   if (usersData) {
-
     res.status(200).json({ usersData });
-
   } else {
-
     throw new NotFoundError();
-
   }
-
 });
 
 const deleteUserData = asyncHandler(async (req, res) => {
   const userId = req.body.userId;
 
   if (!userId) {
-    throw new BadRequestError("UserId not received in request - User blocking failed.");
+    throw new BadRequestError(
+      "UserId not received in request - User blocking failed."
+    );
   }
 
-  const deletedUser = await User.findByIdAndDelete(userId)
+  const deletedUser = await User.findByIdAndDelete(userId);
 
   if (deletedUser) {
     res.status(200).json({ message: "User deleted successfully." });
   } else {
     throw new BadRequestError("User not found or already deleted.");
   }
-
 });
 
 const blockUser = asyncHandler(async (req, res) => {
-
   const userId = req.body.userId;
 
   if (!userId) {
-    throw new BadRequestError("UserId not received in request - User blocking failed.");
+    throw new BadRequestError(
+      "UserId not received in request - User blocking failed."
+    );
   }
 
   const userBlockingProcess = await blockUserHelper(userId);
@@ -239,24 +234,22 @@ const blockUser = asyncHandler(async (req, res) => {
   const responseMessage = userBlockingProcess.message;
 
   if (userBlockingProcess.success) {
-
     res.status(201).json({ message: responseMessage });
-
   } else {
-
     throw new BadRequestError(responseMessage);
   }
 });
 
 const unBlockUser = asyncHandler(async (req, res) => {
-
   const userId = req.body.userId;
   const name = req.body.name;
   const email = req.body.email;
-  const plate = req.body.plate
+  const plate = req.body.plate;
 
   if (!userId) {
-    throw new BadRequestError("UserId not received in request - User Un-blocking failed.");
+    throw new BadRequestError(
+      "UserId not received in request - User Un-blocking failed."
+    );
   }
 
   const userUnblockingProcess = await unBlockUserHelper(userId);
@@ -266,9 +259,7 @@ const unBlockUser = asyncHandler(async (req, res) => {
   if (userUnblockingProcess.success) {
     await sendMail(email, name, plate, true);
     res.status(201).json({ message: responseMessage });
-
   } else {
-
     throw new BadRequestError(responseMessage);
   }
 });
@@ -279,7 +270,9 @@ const updateUserData = asyncHandler(async (req, res) => {
   const email = req.body.email;
 
   if (!userId || !name || !email) {
-    throw new BadRequestError("User data not received in request - User update failed.");
+    throw new BadRequestError(
+      "User data not received in request - User update failed."
+    );
   }
 
   const userData = { userId: userId, name: name, email: email };
@@ -291,9 +284,7 @@ const updateUserData = asyncHandler(async (req, res) => {
 
     res.status(200).json({ message: response });
   } else {
-
     throw new BadRequestError("User update failed.");
-    
   }
 });
 
@@ -301,20 +292,71 @@ const getAllUsersData = asyncHandler(async (req, res) => {
   const usersData = await getUsers();
 
   if (usersData) {
-
     res.status(200).json({ usersData });
-
   } else {
-
     throw new NotFoundError();
+  }
+});
 
+const addParking = asyncHandler(async (req, res) => {
+  /*
+     # Desc: Register new parking
+     # Route: POST /api/v1/admin/parking
+     # Access: PRIVATE
+    */
+
+  const { name, email, telephone, longitude, latitude, places, max_places } =
+    req.body;
+
+  // Check if parking already exist
+  const parkingExists = await Parking.findOne({ name });
+
+  const parkingEmailExists = await Parking.findOne({ email });
+
+  // If the parking already exists, throw an error
+  if (parkingExists || parkingEmailExists) {
+    throw new BadRequestError("Parking name or email is already registered.");
   }
 
+  // Store the user data to DB if the user dosen't exist already.
+  try {
+    const parking = await Parking.create({
+      name: name,
+      email: email,
+      telephone: telephone,
+      longitude: longitude,
+      latitude: latitude,
+      places: places,
+      max_places: max_places,
+    });
+
+    res.status(201).json();
+  } catch (error) {
+    console.log("Une erreur est survenue : " + error);
+  }
+});
+
+const deleteParking = asyncHandler(async (req, res) => {
+  const parkingId = req.body.parkingId;
+
+  if (!parkingId) {
+    throw new BadRequestError(
+      "UserId not received in request - User blocking failed."
+    );
+  }
+
+  const deletedParking = await Parking.findByIdAndDelete(parkingId);
+
+  if (deletedParking) {
+    res.status(200).json({ message: "Parking deleted successfully." });
+  } else {
+    throw new BadRequestError("Parking not found or already deleted.");
+  }
 });
 
 const getAllReview = asyncHandler(async (req, res) => {
-  const usersData = await getReview();
-
+  const usersData = await getReview(); 
+  
   if (usersData) {
 
     res.status(200).json({ usersData });
@@ -339,5 +381,7 @@ export {
   updateUserData,
   deleteUserData,
   getAllUsersData,
-  getAllReview
+  getAllReview,
+  addParking,
+  deleteParking,
 };

@@ -1,6 +1,6 @@
 import { apiSlice } from "./apiSlice";
 
-import { USER_AUTHENTICATION_URL, USER_LOGOUT_URL, USER_REGISTRATION_URL, USER_PROFILE_URL, USER_UPDATE_SUBSCRIPTION,  USER_ADD_AVIS_URL, USER_GET_PARKING, USER_GET_AVIS_URL} from '../utils/constants.js';
+import { USER_AUTHENTICATION_URL, USER_LOGOUT_URL, USER_REGISTRATION_URL, USER_PROFILE_URL, USER_UPDATE_SUBSCRIPTION,  USER_ADD_AVIS_URL, USER_GET_PARKING, USER_GET_AVIS_URL, USER_GET_SUBRSCRIPTION} from '../utils/constants.js';
 
 const USER_AUTH_URL = USER_AUTHENTICATION_URL;
 
@@ -40,6 +40,13 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    getSubscription: builder.mutation({
+      query: (data) => ({
+        url: USER_GET_SUBRSCRIPTION,
+        method: "POST",
+        body: data,
+      }),
+    }),
     getparking: builder.mutation({
       query: () => ({
         url: USER_GET_PARKING,
@@ -72,5 +79,6 @@ export const {
   useAddAvisMutation,
   useGetparkingMutation,
   useGetAvisMutation,
+  useGetSubscriptionMutation,
 } = usersApiSlice;
 

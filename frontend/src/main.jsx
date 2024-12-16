@@ -23,8 +23,7 @@ import AboUser from "./screens/userScreens/AbonnementScreen.jsx";
 
 import ParkingAccess from "./screens/userScreens/ParkingAccess.jsx";
 
-import AvisUser from "./screens/userScreens/AddAvisScreen.jsx"
-
+import AvisUser from "./screens/userScreens/AddAvisScreen.jsx";
 
 //? ==================================== Admin Screens Import ====================================
 import AdminPrivateRoutes from "./screens/adminScreens/PrivateRoutes.jsx";
@@ -35,6 +34,8 @@ import AdminProfileScreen from "./screens/adminScreens/ProfileScreen.jsx";
 import UsersManagementScreen from "./screens/adminScreens/UsersManagementScreen.jsx";
 import MonitoringScreen from "./screens/adminScreens/MonitoringScreen.jsx";
 import ReviewScreen from "./screens/adminScreens/ReviewScreen.jsx";
+import HandleParking from "./screens/adminScreens/HandleParkingScreen.jsx";
+// import ReviewScreen from "./screens/adminScreens/ReviewScreen.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -47,10 +48,9 @@ const router = createBrowserRouter(
 
       <Route path="/register" element={<RegisterScreen />} />
 
-      <Route path="/abonnement" element={<AboUser />} />  
-      
-      <Route path="/addreview" element={< AvisUser />} />  
-     
+      <Route path="/abonnement" element={<AboUser />} />
+
+      <Route path="/addreview" element={<AvisUser />} />
 
       {/* USER PRIVATE ROUTES */}
       <Route path="" element={<PrivateRoutes />}>
@@ -73,6 +73,8 @@ const router = createBrowserRouter(
         <Route path="/admin/manage-users" element={<UsersManagementScreen />} />
         <Route path="/admin/monitoring" element={<MonitoringScreen />} />
         <Route path="/admin/review" element={<ReviewScreen />} />
+        <Route path="/admin/handle" element={<HandleParking />} />
+        {/* <Route path="/admin/review" element={<ReviewScreen />} /> */}
       </Route>
     </Route>
   )

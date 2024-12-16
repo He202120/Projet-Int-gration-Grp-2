@@ -14,6 +14,52 @@
   flex-direction: column;
 }
 
+.filter {
+  display: flex;
+  align-items: center;
+}
+
+.numberSelector {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  border-width: 1px;
+  border-style: solid;
+  border-color: lightgrey;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 40px;
+  margin-left: 40px;
+}
+
+.name-input-container {
+  margin-left: 20px;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.name-label {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.name-input {
+  padding: 10px;
+  border: 1px solid #b4b4b4;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 300px;
+  transition: border-color 0.3s;
+  transition: box-shadow 0.3s;
+}
+
+.name-input:focus {
+  border-color: #0056b3;
+  box-shadow: 0 0 5px blue;
+  outline: none;
+}
+
 /* Sizing of map container */
 .leaflet-container {
   height: 70vh;

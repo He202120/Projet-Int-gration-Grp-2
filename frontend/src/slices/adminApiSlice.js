@@ -1,149 +1,139 @@
 import { apiSlice } from "./apiSlice";
-import { 
-    ADMIN_AUTHENTICATION_URL,
-    ADMIN_LOGOUT_URL,
-    ADMIN_REGISTRATION_URL,
-    ADMIN_PROFILE_URL,
-    ADMIN_USERS_DATA_FETCH_URL,
-    ADMIN_BLOCK_USER_URL,
-    ADMIN_UNBLOCK_USER_URL,
-    ADMIN_UPDATE_USER_URL,
-    ADMIN_DELETE_USER_URL,
-    ADMIN_USERS_DATA_GET_URL,
-    ADMIN_REVIEW_DATA_URL,
-    // ADMIN_DELETE_AVIS_URL,
-} from '../utils/constants.js';
-
+import {
+  ADMIN_AUTHENTICATION_URL,
+  ADMIN_LOGOUT_URL,
+  ADMIN_REGISTRATION_URL,
+  ADMIN_PROFILE_URL,
+  ADMIN_USERS_DATA_FETCH_URL,
+  ADMIN_BLOCK_USER_URL,
+  ADMIN_UNBLOCK_USER_URL,
+  ADMIN_UPDATE_USER_URL,
+  ADMIN_DELETE_USER_URL,
+  ADMIN_USERS_DATA_GET_URL,
+  ADMIN_PARKINGS_DATA_GET_URL,
+  ADMIN_REVIEW_DATA_URL,
+  ADMIN_ADD_PARKING,
+  ADMIN_DELETE_PARKING,
+} from "../utils/constants.js";
 
 
 export const adminApiSlice = apiSlice.injectEndpoints({
-    
-    endpoints: (builder) => ({
-        
-        adminLogin: builder.mutation({
-            
-            query: (data) => ({
-                url: ADMIN_AUTHENTICATION_URL,
-                method: 'POST',
-                body: data
-            })
+  endpoints: (builder) => ({
+    adminLogin: builder.mutation({
+      query: (data) => ({
+        url: ADMIN_AUTHENTICATION_URL,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    adminLogout: builder.mutation({
+      query: () => ({
+        url: ADMIN_LOGOUT_URL,
+        method: "POST",
+      }),
+    }),
+    adminRegister: builder.mutation({
+      query: (data) => ({
+        url: ADMIN_REGISTRATION_URL,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    updateAdmin: builder.mutation({
+      query: (data) => ({
+        url: ADMIN_PROFILE_URL,
+        method: "PUT",
+        body: data,
+      }),
+    }),
+    getUsersData: builder.mutation({
+      query: () => ({
+        url: ADMIN_USERS_DATA_FETCH_URL,
+        method: "POST",
+      }),
+    }),
+    blockUser: builder.mutation({
+      query: (data) => ({
+        url: ADMIN_BLOCK_USER_URL,
+        method: "PATCH",
+        body: data,
+      }),
+    }),
+    unblockUser: builder.mutation({
+      query: (data) => ({
+        url: ADMIN_UNBLOCK_USER_URL,
+        method: "PATCH",
+        body: data,
+      }),
+    }),
+    updateUserByAdmin: builder.mutation({
+      query: (data) => ({
+        url: ADMIN_UPDATE_USER_URL,
+        method: "PUT",
+        body: data,
+      }),
+    }),
 
-        }),
-        adminLogout: builder.mutation({
-            
-            query: () => ({
-                url: ADMIN_LOGOUT_URL,
-                method: 'POST'
-            })
+    getUsersAllData: builder.mutation({
+      query: () => ({
+        url: ADMIN_USERS_DATA_GET_URL,
+        method: "POST",
+      }),
+    }),
 
-        }),
-        adminRegister: builder.mutation({
-            
-            query: (data) => ({
-                url: ADMIN_REGISTRATION_URL,
-                method: 'POST',
-                body: data
-            })
+    DeleteUser: builder.mutation({
+      query: (data) => ({
+        url: ADMIN_DELETE_USER_URL,
+        method: "DELETE",
+        body: data,
+      }),
+    }),
 
-        }),
-        updateAdmin: builder.mutation({
-            
-            query: (data) => ({
-                url: ADMIN_PROFILE_URL,
-                method: 'PUT',
-                body: data
-            })
+    getParkingsAllData: builder.mutation({
+      query: () => ({
+        url: ADMIN_PARKINGS_DATA_GET_URL,
+        method: "POST",
+      }),
+    }),
 
-        }),
-        getUsersData: builder.mutation({
-            
-            query: () => ({
-                url: ADMIN_USERS_DATA_FETCH_URL,
-                method: 'POST'
-            })
+    addParking: builder.mutation({
+      query: (data) => ({
+        url: ADMIN_ADD_PARKING,
+        method: "POST",
+        body: data,
+      }),
+    }),
 
-        }),
-        blockUser: builder.mutation({
-            
-            query: (data) => ({
-                url: ADMIN_BLOCK_USER_URL,
-                method: 'PATCH',
-                body: data
-            })
+    getReviewsData: builder.mutation({  
+      query: () => ({
+          url: ADMIN_REVIEW_DATA_URL,
+          method: 'POST',
+      })
 
-        }),
-        unblockUser: builder.mutation({
-            
-            query: (data) => ({
-                url: ADMIN_UNBLOCK_USER_URL,
-                method: 'PATCH',
-                body: data
-            })
-
-        }),
-        updateUserByAdmin: builder.mutation({
-            
-            query: (data) => ({
-                url: ADMIN_UPDATE_USER_URL,
-                method: 'PUT',
-                body: data
-            })
-
-        }),
-
-        getUsersAllData: builder.mutation({
-
-            query: () => ({
-                url: ADMIN_USERS_DATA_GET_URL,
-                method: 'POST'
-            })
-
-        }),
-
-        DeleteUser: builder.mutation({
-            
-            query: (data) => ({
-                url: ADMIN_DELETE_USER_URL,
-                method: 'DELETE',
-                body: data
-            })
-
-        }),
-        getReviewsData: builder.mutation({  
-            query: () => ({
-                url: ADMIN_REVIEW_DATA_URL,
-                method: 'POST',
-            })
-
-        }),
-
-    // // DeleteAvis: builder.mutation({
-        
-    // //     query: (data) => ({
-    // //         url: ADMIN_DELETE_AVIS_URL,
-    // //         method: 'DELETE',
-    // //         body: data
-    // //     })
-
-    // }),
-
-    })
-    
-    
-})
+  }),
+    DeleteParking: builder.mutation({
+      query: (data) => ({
+        url: ADMIN_DELETE_PARKING,
+        method: "DELETE",
+        body: data,
+      }),
+    }),
+  }),
+});
 
 export const {
-
-    useAdminLoginMutation,
-    useAdminLogoutMutation,
-    useAdminRegisterMutation,
-    useUpdateAdminMutation,
-    useGetUsersDataMutation,
-    useBlockUserMutation,
-    useUnblockUserMutation,
-    useUpdateUserByAdminMutation,
-    useDeleteUserMutation,
-    useGetUsersAllDataMutation,
-    useGetReviewsDataMutation,
-    // useDeleteAvisMutation,
+  useAdminLoginMutation,
+  useAdminLogoutMutation,
+  useAdminRegisterMutation,
+  useUpdateAdminMutation,
+  useGetUsersDataMutation,
+  useBlockUserMutation,
+  useUnblockUserMutation,
+  useUpdateUserByAdminMutation,
+  useDeleteUserMutation,
+  useGetUsersAllDataMutation,
+  useGetParkingsAllDataMutation,
+  useAddParkingMutation,
+  useGetReviewsDataMutation,
+  useDeleteParkingMutation,
 } = adminApiSlice;

@@ -21,7 +21,6 @@ const UsersDataTable = ({ users }) => {
   const [userParkingToUnblock, setUserParkingToUnblock] = useState(null);
   const [userSubscriptionToUnblock, setUsersubscriptionToUnblock] = useState(null);
   const [userEnd_dateToUnblock, setUserEnd_dateToUnblock] = useState(null);
-  const [userEntranceToUnblock, setUserEntranceToUnblock] = useState(null);
 
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [userIdToUpdate, setUserIdToUpdate] = useState("");
@@ -31,8 +30,6 @@ const UsersDataTable = ({ users }) => {
   const [userParkingToUpdate, setUserParkingToUpdate] = useState("");
   const [userSubscriptionToUpdate, setUsersubscriptionToUpdate] = useState("");
   const [userEnd_dateToUpdate, setUserEnd_dateToUpdate] = useState("");
-  const [userEntranceToUpdate, setUserEntranceToUpdate] = useState("");
-
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -62,7 +59,7 @@ const UsersDataTable = ({ users }) => {
 
   const handleUnblock = async () => {
     try {
-      const responseFromApiCall = await unblockUser({ userId: userIdToUnblock, name: userNameToUnblock, plate: userPlateToUnblock, email: userMailToUnblock, parking: userParkingToUnblock, subscription: userSubscriptionToUnblock, end_date: userEnd_dateToUnblock, entrance: userEntranceToUnblock});
+      const responseFromApiCall = await unblockUser({ userId: userIdToUnblock, name: userNameToUnblock, plate: userPlateToUnblock, email: userMailToUnblock, parking_id: userParkingToUnblock, type_subscription: userSubscriptionToUnblock, subscription_end_date: userEnd_dateToUnblock});
       toast.success("User Accepted Successfully.");
       setUserIdToUnblock(null);
       setShowUnblockingConfirmation(false);
@@ -78,9 +75,8 @@ const UsersDataTable = ({ users }) => {
     setUserEmailToUpdate(user.email);
     setUserPlateToUpdate(user.plate);
     setUserParkingToUpdate(user.parking);
-    setUsersubscriptionToUpdate(user.subscription);
-    setUserEnd_dateToUpdate(user.end_date);
-    setUserEntranceToUpdate(user.entrance);
+    setUsersubscriptionToUpdate(user.type_subscription);
+    setUserEnd_dateToUpdate(user.subscription_end_date);
     setShowUpdateModal(true);
   };
 
@@ -94,7 +90,6 @@ const UsersDataTable = ({ users }) => {
         parking: userParkingToUpdate,
         subscription: userSubscriptionToUpdate,
         end_date: userEnd_dateToUpdate,
-        entrance: userEntranceToUpdate
       });
       toast.success("User Updated Successfully.");
       setUserIdToUpdate(null);
@@ -119,9 +114,8 @@ const UsersDataTable = ({ users }) => {
             <th>Delete</th>
             <th>Accept User</th>
             <th>Parking now</th>
-            <th>subscription</th>
-            <th>end_date</th>
-            <th>entrance</th>
+            <th>Type_Subscription</th>
+            <th>Subscription_End_Date</th>
           </tr>
         </thead>
         <tbody>
@@ -166,10 +160,9 @@ const UsersDataTable = ({ users }) => {
                       setUserNametoUnblock(user.name);
                       setUserMailtoUnblock(user.email);
                       setUserPlateToUnblock(user.plate);
-                      setUserParkingToUnblock(user.parking);
-                      setUsersubscriptionToUnblock(user.subscription);
-                      setUserEnd_dateToUnblock(user.end_date);
-                      setUserEntranceToUnblock(user.entrance);
+                      setUserParkingToUnblock(user.parking_id);
+                      setUsersubscriptionToUnblock(user.type_Subscription);
+                      setUserEnd_dateToUnblock(user.subscription_end_date);
                       setShowUnblockingConfirmation(true);
                     }}
                   >
@@ -177,10 +170,9 @@ const UsersDataTable = ({ users }) => {
                   </Button>
                 )}
               </td>
-              <td>{user.parking === 0 ? "pas dans un parking" : user.parking}</td>
+              <td>{user.parking === 0 ? "pas dans un parking" : user.parking_id}</td>
               <td>{user.subscription}</td>
               <td>{user.end_date}</td>
-              <td>{user.entrance}</td>
             </tr>
           ))}
         </tbody>
@@ -254,16 +246,16 @@ const UsersDataTable = ({ users }) => {
 
       <Modal show={showUpdateModal} onHide={() => setShowUpdateModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Update User</Modal.Title>
+          <Modal.Title>Update Plate</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <BootstrapForm>
-            <BootstrapForm.Group controlId="name">
-              <BootstrapForm.Label>Name</BootstrapForm.Label>
+            <BootstrapForm.Group controlId="plate">
+              <BootstrapForm.Label>Plate</BootstrapForm.Label>
               <BootstrapForm.Control
                 type="text"
-                value={userNameToUpdate}
-                onChange={(e) => setUserNameToUpdate(e.target.value)}
+                value={userPlateToUpdate}
+                onChange={(e) => setUserPlateToUpdate(e.target.value)}
               />
             </BootstrapForm.Group>
 

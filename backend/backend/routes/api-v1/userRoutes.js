@@ -17,6 +17,7 @@ import {
   updateUserProfile,
   update_Abonnement,
   registerAvis,
+  get_Abonnement,
 } from "../../controllers/userController.js";
 
 import { getAllParkings } from "../../controllers/parkingController.js";
@@ -59,6 +60,7 @@ router
 // In the above line, the route is same, above line will use the specified controller according to the type of the request
 
 router.put("/set_sub", requireAuth, verifyUser, update_Abonnement);
+router.post("/get_sub", get_Abonnement);
 
 router.post("/get_parking", requireAuth, verifyUser, getAllParkings);
 

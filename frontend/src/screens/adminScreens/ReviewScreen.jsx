@@ -6,35 +6,33 @@ import { useNavigate } from "react-router-dom";
 import { useGetReviewsDataMutation } from "../../slices/adminApiSlice";
 import Loader from "../../components/Loader";
 import StarRating from "../../components/StarRating";
-import { Link } from 'react-router-dom';  // Ajoutez cette ligne
+import { Link } from 'react-router-dom';  
 
 const ReviewScreen = () => {
-  const [avisList, setAvisList] = useState([]); // Liste des avis
-  const [isLoadingAvis, setIsLoadingAvis] = useState(false); // Gérer le chargement des avis
+  const [avisList, setAvisList] = useState([]); 
+  const [isLoadingAvis, setIsLoadingAvis] = useState(false); 
 
-  const navigate = useNavigate(); // Redirection
-  const { userInfo } = useSelector((state) => state.auth); // Récupérer l'utilisateur connecté
+  const navigate = useNavigate(); 
+  const { userInfo } = useSelector((state) => state.auth); 
 
-  const [getReview] = useGetReviewsDataMutation(); // Mutation pour récupérer les avis
-
+  const [getReviewsData] = useGetReviewsDataMutation(); 
   useEffect(() => {
-    if (!userInfo) {
-      // navigate("/login"); // Redirection si l'utilisateur n'est pas connecté
-    } else {
-      fetchAvis(); // Récupération des avis si connecté
-    }
+    
+      fetchAvis(); 
+    
   }, [navigate, userInfo]);
 
   const fetchAvis = async () => {
-    setIsLoadingAvis(true); // Lancer le chargement des avis
+    setIsLoadingAvis(true); 
     try {
-      const responseFromApiCall = await getReview(); // Appel API
-      const responses = responseFromApiCall.data?.avisData || [];
-      setAvisList(responses); // Mettre à jour la liste des avis
+      const responseFromApiCall = await getReviewsData(); 
+      const responses = responseFromApiCall.data?.usersData || [];
+      
+      setAvisList(responses); 
     } catch (err) {
       console.error(err);
     } finally {
-      setIsLoadingAvis(false); // Terminer le chargement des avis
+      setIsLoadingAvis(false); 
     }
   };
 
@@ -46,7 +44,7 @@ const ReviewScreen = () => {
       {isLoadingAvis ? (
         <Loader />
       ) : avisList.length === 0 ? (
-        <p>Aucun avis pour le moment.</p> // Message si aucun avis disponible
+        <p>Aucun avis pour le moment.</p> 
       ) : (
         <ListGroup>
           {avisList.map((avis, index) => (
@@ -63,7 +61,7 @@ const ReviewScreen = () => {
       {/* Lien pour retourner à l'accueil */}
       <Row className="py-3">
         <Col>
-          <Link to="/">Retour à l'accueil</Link>
+          <Link to="/admin/login">Retour à l'accueil</Link>
         </Col>
       </Row>
     </div>

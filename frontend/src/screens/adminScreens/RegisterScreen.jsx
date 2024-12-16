@@ -21,6 +21,7 @@ const AdminRegisterScreen = () => {
 
 
   const [name, setName] = useState("");
+  const [firstname, setFirstname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -55,7 +56,7 @@ const AdminRegisterScreen = () => {
 
       try{
 
-        const responseFromApiCall = await register( { name, email, password, adminRegistrationKey } ).unwrap();
+        const responseFromApiCall = await register( { name, firstname, email, password, adminRegistrationKey } ).unwrap();
 
         dispatch( setCredentials( { ...responseFromApiCall } ) );
         
@@ -85,6 +86,16 @@ const AdminRegisterScreen = () => {
                     placeholder="Enter name here..."
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                ></Form.Control>
+            </Form.Group>
+
+            <Form.Group className="my-2" controlId="firstname">            
+                <Form.Label>Firstname</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="Enter name here..."
+                    value={firstname}
+                    onChange={(e) => setFirstname(e.target.value)}
                 ></Form.Control>
             </Form.Group>
             
