@@ -8,7 +8,7 @@ const StarRating = ({ rating, setRating }) => {
   };
 
   return (
-    <div style={{ display: "flex", gap: "5px" }}>
+    <div style={{ display: "flex", gap: "px" }}>
       {[1, 2, 3, 4, 5].map((star) => (
         <FaStar
           key={star}
