@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 const calculateEndDate = (time) => {
   const today = new Date();
   const match = time.match(/(\d+)(Day|Month|Year)/); // Extrait le chiffre et l'unité (ex: "5Month" => ["5Month", "5", "Month"])
-  
+
   if (match) {
     const value = parseInt(match[1], 10); // La valeur numérique
     const unit = match[2]; // L'unité (Day, Month, Year)
@@ -52,36 +52,37 @@ function ChoixAbo() {
     }
   }, [authState]);
 
-  // Récupération des données d'abonnement pour l'utilisateur
-  useEffect(() => {
-    const fetchSubscription = async () => {
-      if (userInfo.email) {
-        try {
-          const result = await getSubscription({ email: userInfo.email }).unwrap();
-          setSubscriptionData(result);
-          console.log(subscriptionData)
-        } catch (err) {
-          toast.error("Erreur lors de la récupération des données d'abonnement.");
-        }
-      }
-    };
-
-    fetchSubscription();
-  }, [userInfo, getSubscription]);
-
-  // Récupération de toutes les subscriptions
-  useEffect(() => {
-    const fetchAllSubscriptions = async () => {
+  // Fonction pour récupérer l'abonnement actuel de l'utilisateur
+  const fetchSubscription = async () => {
+    if (userInfo.email) {
       try {
-        const result = await getAllSubscriptions().unwrap();
-        setAllSubscriptions(result.sub); // Stocker les données
+        const result = await getSubscription({ email: userInfo.email }).unwrap();
+        setSubscriptionData(result);
       } catch (err) {
-        toast.error("Erreur lors de la récupération des subscriptions.");
+        toast.error("Erreur lors de la récupération des données d'abonnement.");
       }
-    };
+    }
+  };
 
+  // Appel initial pour récupérer l'abonnement de l'utilisateur
+  useEffect(() => {
+    fetchSubscription();
+  }, [userInfo]);
+
+  // Fonction pour récupérer toutes les subscriptions disponibles
+  const fetchAllSubscriptions = async () => {
+    try {
+      const result = await getAllSubscriptions().unwrap();
+      setAllSubscriptions(result.sub); // Stocker les données
+    } catch (err) {
+      toast.error("Erreur lors de la récupération des subscriptions.");
+    }
+  };
+
+  // Appel initial pour récupérer toutes les subscriptions
+  useEffect(() => {
     fetchAllSubscriptions();
-  }, [getAllSubscriptions]);
+  }, []);
 
   // Fonction pour gérer la sélection d'un abonnement
   const handleSelectPlan = async (planId, time) => {
@@ -91,12 +92,15 @@ function ChoixAbo() {
       name: userInfo.name || "Nom non disponible",
       mail: userInfo.email || "Email non disponible",
       type_subscription: planId, // Utilisation de l'ID de l'abonnement
-      subscription_end_date: calculateEndDate(time)
+      subscription_end_date: calculateEndDate(time),
     };
-console.log(newSubscription);
+
     try {
       await updateSubscription(newSubscription).unwrap();
       toast.success("Nouvel abonnement mis à jour");
+
+      // Actualiser les données d'abonnement après mise à jour
+      fetchSubscription();
     } catch (err) {
       toast.error("Erreur lors de la mise à jour de l'abonnement.");
     }
@@ -106,19 +110,21 @@ console.log(newSubscription);
     <Container className="text-center mt-5">
       <h1>Choisissez votre abonnement</h1>
 
+      {/* Affichage des informations d'abonnement actuelles */}
       {subscriptionData && (
-  <div className="mt-4">
-    <h3>Votre abonnement actuel :</h3>
-    <p>Type : {subscriptionData.type_subscription || "aucun"}</p>
-    <p>
-      Date de fin :{" "}
-      {subscriptionData.subscription_end_date
-        ? new Date(subscriptionData.subscription_end_date).toLocaleDateString()
-        : "aucun"}
-    </p>
-  </div>
-)}
+        <div className="mt-4">
+          <h3>Votre abonnement actuel :</h3>
+          <p>Type : {subscriptionData.type_subscription || "aucun"}</p>
+          <p>
+            Date de fin :{" "}
+            {subscriptionData.subscription_end_date
+              ? new Date(subscriptionData.subscription_end_date).toLocaleDateString()
+              : "aucun"}
+          </p>
+        </div>
+      )}
 
+      {/* Affichage des cartes d'abonnement */}
       {allSubscriptions.length > 0 && (
         <Row className="mt-4">
           {allSubscriptions.map((sub) => (
@@ -135,6 +141,7 @@ console.log(newSubscription);
         </Row>
       )}
 
+      {/* Affichage de la sélection actuelle */}
       {selectedPlan && (
         <p className="mt-4">
           Vous avez sélectionné l'abonnement : <strong>{selectedPlan}</strong>
@@ -144,6 +151,7 @@ console.log(newSubscription);
   );
 }
 
+// Composant pour les cartes d'abonnement
 function SubscriptionCard({ title, price, description, onSelect, isSelected }) {
   return (
     <Card border={isSelected ? "success" : "light"} className="h-100">
