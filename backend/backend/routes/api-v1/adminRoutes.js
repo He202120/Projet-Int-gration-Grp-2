@@ -29,6 +29,7 @@ import {
   getAllReview,
   addParking,
   deleteParking,
+  deleteAvisData,
 } from "../../controllers/adminController.js";
 
 // Data validation configuration
@@ -96,6 +97,7 @@ router.put(
   updateUserData
 );
 
+
 router.post("/get-info-users", requireAuth, verifyAdmin, getAllUsersData);
 
 router.post("/get-review", requireAuth, verifyAdmin, getAllReview);
@@ -113,4 +115,7 @@ router.delete(
   validateRequest,
   deleteParking
 );
+
+router.delete("/delete-avis", requireAuth, verifyAdmin, validateRequest, deleteAvisData);
+
 export default router;

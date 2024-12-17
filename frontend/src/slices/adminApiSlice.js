@@ -14,6 +14,7 @@ import {
   ADMIN_REVIEW_DATA_URL,
   ADMIN_ADD_PARKING,
   ADMIN_DELETE_PARKING,
+  ADMIN_DELETE_Avis_URL,
 } from "../utils/constants.js";
 
 export const adminApiSlice = apiSlice.injectEndpoints({
@@ -117,6 +118,13 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    DeleteAvis: builder.mutation({
+      query: (data) => ({
+        url: ADMIN_DELETE_Avis_URL,
+        method: "DELETE",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -135,4 +143,5 @@ export const {
   useAddParkingMutation,
   useGetReviewsDataMutation,
   useDeleteParkingMutation,
+  useDeleteAvisMutation,
 } = adminApiSlice;
