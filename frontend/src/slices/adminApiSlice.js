@@ -17,6 +17,8 @@ import {
   ADMIN_ADD_SUBSCRIPTION,
   ADMIN_USERS_BY_PARKING_FETCH_URL,
   ADMIN_GET_ALL_SUBRSCRIPTION,
+  ADMIN_DELETE_SUBSCRIPTION,
+  ADMIN_UPDATE_PRICE,
 
 } from "../utils/constants.js";
 
@@ -140,6 +142,20 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
       }),
     }),
+    deleteSubscription: builder.mutation({
+      query: (data) => ({
+        url: ADMIN_DELETE_SUBSCRIPTION,
+        method: "DELETE",
+        body: data,
+      }),
+    }),
+    updateSubPrice: builder.mutation({
+      query: (data) => ({
+        url: ADMIN_UPDATE_PRICE,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -160,5 +176,7 @@ export const {
   useDeleteParkingMutation,
   useAddSubMutation,
   useGetAllAdminSubscriptionMutation,
+  useDeleteSubscriptionMutation,
+  useUpdateSubPriceMutation,
   useGetUsersByParkingIdMutation,
 } = adminApiSlice;

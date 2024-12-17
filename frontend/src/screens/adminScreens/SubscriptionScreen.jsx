@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import {
   useAddSubMutation,
   useGetAllAdminSubscriptionMutation,
+  useDeleteSubscriptionMutation,
+  useUpdateSubPriceMutation, // Ajout de la mutation
 } from "../../slices/adminApiSlice";
 
 const SubscriptionScreen = () => {
@@ -17,24 +19,26 @@ const SubscriptionScreen = () => {
 
   // États pour les abonnements
   const [allSubscriptions, setAllSubscriptions] = useState([]);
+  const [updatedPrice, setUpdatedPrice] = useState({}); // Nouvel état pour gérer le prix temporaire
 
+  // Mutations API
   const [getAllSub] = useGetAllAdminSubscriptionMutation();
-  const [addSub, { isLoading }] = useAddSubMutation();
+  const [addSub] = useAddSubMutation();
+  const [deleteSubscription] = useDeleteSubscriptionMutation();
+  const [updatePrice] = useUpdateSubPriceMutation(); // Mutation pour l'update du prix
 
-  // Mettre à jour la durée combinée et récupérer les abonnements
+  // Récupération des abonnements
+  const fetchAllSubscriptions = async () => {
+    try {
+      const result = await getAllSub().unwrap();
+      setAllSubscriptions(result.sub);
+    } catch (err) {
+      toast.error("Erreur lors de la récupération des abonnements.");
+    }
+  };
+
   useEffect(() => {
     setTime(`${timeValue}${timeUnit}`);
-
-    const fetchAllSubscriptions = async () => {
-      try {
-        const result = await getAllSub().unwrap();
-        setAllSubscriptions(result.sub);
-        console.log(result.sub);
-      } catch (err) {
-        toast.error("Erreur lors de la récupération des subscriptions.");
-      }
-    };
-
     fetchAllSubscriptions();
   }, [timeValue, timeUnit]);
 
@@ -47,22 +51,50 @@ const SubscriptionScreen = () => {
       return;
     }
 
-    const subs = { name, time, price };
-
     try {
-      console.log(subs);
       await addSub({ name, time, price }).unwrap();
       toast.success("Abonnement ajouté avec succès !");
       setName("");
       setTimeValue(0);
       setTimeUnit("Day");
       setPrice(0);
-
-      // Actualiser les abonnements après ajout
-      const result = await getAllSub().unwrap();
-      setAllSubscriptions(result.sub);
+      fetchAllSubscriptions(); // Actualiser la liste
     } catch (err) {
       toast.error(err?.data?.errors[0]?.message || err?.error);
+    }
+  };
+
+  // Gestion de la suppression d'un abonnement
+  const handleDelete = async (id) => {
+    if (window.confirm("Voulez-vous vraiment supprimer cet abonnement ?" + id)) {
+      try {
+        await deleteSubscription({ id }).unwrap();
+        toast.success("Abonnement supprimé avec succès !");
+        fetchAllSubscriptions();
+      } catch (err) {
+        toast.error("Erreur lors de la suppression.");
+      }
+    }
+  };
+
+  // Gestion de la mise à jour du prix
+  const handlePriceChange = (id, newPrice) => {
+    setUpdatedPrice({ ...updatedPrice, [id]: newPrice });
+  };
+
+  const handleUpdatePrice = async (id) => {
+    const newPrice = updatedPrice[id];
+    if (!newPrice || newPrice <= 0) {
+      toast.error("Le prix doit être valide.");
+      return;
+    }
+
+    try {
+      await updatePrice({ id, price: newPrice }).unwrap();
+      toast.success("Prix mis à jour avec succès !");
+      fetchAllSubscriptions(); // Actualiser la liste
+    } catch (err) {
+      toast.error("Erreur lors de la mise à jour du prix.");
     }
   };
 
@@ -135,16 +167,22 @@ const SubscriptionScreen = () => {
                 <td>{index + 1}</td>
                 <td>{subscription.name}</td>
                 <td>{subscription.time}</td>
-                <td>{subscription.price} €</td>
+                <td>
+                  <Form.Control
+                    type="number"
+                    value={updatedPrice[subscription._id] || subscription.price}
+                    onChange={(e) =>
+                      handlePriceChange(subscription._id, Number(e.target.value))
+                    }
+                    style={{ width: "80px" }}
+                  />
+                  €
+                </td>
                 <td>
                   <Button
                     variant="warning"
                     size="sm"
-                    onClick={() => {
-                      toast.info(
-                        `Bouton Update cliqué pour ${subscription.name}.`
-                      );
-                    }}
+                    onClick={() => handleUpdatePrice(subscription._id)}
                   >
                     Update
                   </Button>
@@ -153,11 +191,7 @@ const SubscriptionScreen = () => {
                   <Button
                     variant="danger"
                     size="sm"
-                    onClick={() => {
-                      toast.info(
-                        `Bouton Delete cliqué pour ${subscription.name}.`
-                      );
-                    }}
+                    onClick={() => handleDelete(subscription._id)}
                   >
                     Delete
                   </Button>

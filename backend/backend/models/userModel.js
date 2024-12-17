@@ -9,7 +9,6 @@ const userSchema = mongoose.Schema(
     },
     firstname: {
         type: String,
-        required: true
     },
     email: {
       type: String,
@@ -42,7 +41,7 @@ const userSchema = mongoose.Schema(
     type_subscription: {
       type: mongoose.Schema.Types.ObjectId, // FK vers Subscription 
       ref: "Subscription", 
-      default: null
+      default: null,
     },
     subscription_end_date: {
         type: Date,
@@ -50,7 +49,7 @@ const userSchema = mongoose.Schema(
     },
     arrival_time: {
         type: Date,
-        default: null
+        default: null,
     },
     requires_accessible_parking: {
         type: Boolean, 

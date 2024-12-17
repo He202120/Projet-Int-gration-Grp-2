@@ -107,12 +107,17 @@ console.log(newSubscription);
       <h1>Choisissez votre abonnement</h1>
 
       {subscriptionData && (
-        <div className="mt-4">
-          <h3>Votre abonnement actuel :</h3>
-          <p>Type : {subscriptionData.type_subscription}</p>
-          <p>Date de fin : {new Date(subscriptionData.subscription_end_date).toLocaleDateString()}</p>
-        </div>
-      )}
+  <div className="mt-4">
+    <h3>Votre abonnement actuel :</h3>
+    <p>Type : {subscriptionData.type_subscription || "aucun"}</p>
+    <p>
+      Date de fin :{" "}
+      {subscriptionData.subscription_end_date
+        ? new Date(subscriptionData.subscription_end_date).toLocaleDateString()
+        : "aucun"}
+    </p>
+  </div>
+)}
 
       {allSubscriptions.length > 0 && (
         <Row className="mt-4">
