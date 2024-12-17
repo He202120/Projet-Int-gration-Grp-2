@@ -13,6 +13,7 @@ import {
   ADMIN_PARKINGS_DATA_GET_URL,
   ADMIN_ADD_PARKING,
   ADMIN_DELETE_PARKING,
+  ADMIN_USERS_BY_PARKING_FETCH_URL,
 } from "../utils/constants.js";
 
 export const adminApiSlice = apiSlice.injectEndpoints({
@@ -108,6 +109,12 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    getUsersByParkingId: builder.mutation({
+      query: (parkingId) => ({
+        url: `/get-users-by-parking?parkingId=${parkingId}`,  // parkingId dans l'URL
+        method: 'POST',
+      }),
+    }),
   }),
 });
 
@@ -125,4 +132,5 @@ export const {
   useGetParkingsAllDataMutation,
   useAddParkingMutation,
   useDeleteParkingMutation,
+  useGetUsersByParkingIdMutation,
 } = adminApiSlice;
