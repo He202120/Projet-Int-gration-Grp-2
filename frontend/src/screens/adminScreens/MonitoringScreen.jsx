@@ -119,6 +119,11 @@ const CarPlatesList = () => {
         : [];
     const countUsersInParking = filteredUsers.length;
 
+    // Filtrer les utilisateurs PMR
+    const PmrUsersInParking = filteredUsers.filter(user => user.requires_accessible_parking === true);
+
+    const countPmrUsersInParking = PmrUsersInParking.length;
+
     // couleur cercle avec calcule en pourcent
     const getCircleColor = () => {
         if (!selectedParking) return "gray"; // Par défaut si aucun parking n'est sélectionné
@@ -169,6 +174,11 @@ const CarPlatesList = () => {
                     }}
                 ></div>
             </div>
+            <div>
+                <h2>
+                    {countPmrUsersInParking}/{selectedParking ? selectedParking.reduced_mobility_spots : "Aucun parking sélectionné"} ♿
+                </h2>
+            </div>
 
 
             <div className="new-data-section" style={{ marginTop: "20px" }}>
@@ -180,6 +190,7 @@ const CarPlatesList = () => {
                         <thead>
                         <tr>
                             <th>Plaque</th>
+                            <th>PMR</th>
                             <th>
                                 <Button
                                     variant="link"
@@ -218,6 +229,9 @@ const CarPlatesList = () => {
                             .map((user, index) => (
                                 <tr key={index}>
                                     <td>{user.plate}</td>
+                                    <td>
+                                        {user.requires_accessible_parking ? "♿" : ""}
+                                    </td>
                                     <td>{user.name}</td>
                                     <td>{user.firstname}</td>
                                     <td>{user.email}</td>
