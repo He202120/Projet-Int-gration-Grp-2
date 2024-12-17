@@ -14,7 +14,7 @@ const router = express.Router();
 
 import { getParkingsData } from "../../controllers/parkingController.js";
 
-import {putSubscriptionData} from "../../controllers/subscriptionController.js";
+import {putSubscriptionData, getAllSubscription,} from "../../controllers/subscriptionController.js";
 
 import {
   authAdmin,
@@ -106,6 +106,8 @@ router.post("/get-review", requireAuth, verifyAdmin, getAllReview);
 router.post("/get-parkings", requireAuth, verifyAdmin, getParkingsData);
 
 router.post("/put-sub", requireAuth, verifyAdmin, putSubscriptionData);
+
+router.post("/get-all-sub", requireAuth, verifyAdmin, getAllSubscription);
 
 //* ===================== Parking Management Routes ==================
 
