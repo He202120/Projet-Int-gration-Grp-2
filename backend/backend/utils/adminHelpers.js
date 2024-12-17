@@ -1,4 +1,5 @@
 import User from "../models/userModel.js";
+import Sub from "../models/subscriptionModel.js"
 
 const fetchAllUsers = async () => {
   try {
@@ -15,12 +16,14 @@ const fetchAllUsers = async () => {
         subscription_end_date: 1,
         arrival_time: 1,
       }
-    );
-
+    ).populate({
+      path: "type_subscription", // Champ à peupler
+      select: "name -_id", // Récupère uniquement le champ "name" sans l'_id
+    });
+    console.log(users);
     return users;
   } catch (error) {
     console.error("Error fetching users:", error);
-
     throw error;
   }
 };
@@ -31,42 +34,33 @@ const blockUserHelper = async (userId) => {
     const user = await User.findById(userId);
 
     if (!user) {
-      // If the user wasn't found (already deleted or never existed), return a status indicating failure
       return { success: false, message: "User not found." };
     }
 
     user.blocked = true;
-    // Save the updated user data
     await user.save();
 
-    // If the user was successfully blocked, return a status indicating success
     return { success: true, message: "User blocked successfully." };
   } catch (error) {
     console.error("Error blocking user:", error);
-
     throw error;
   }
 };
 
 const unBlockUserHelper = async (userId) => {
   try {
-    // Attempt to find the user by their _id
     const user = await User.findById(userId);
 
     if (!user) {
-      // If the user wasn't found (already deleted or never existed), return a status indicating failure
       return { success: false, message: "User not found." };
     }
 
     user.blocked = false;
-    // Save the updated user data
     await user.save();
 
-    // If the user was successfully unblocked, return a status indicating success
-    return { success: true, message: "User Un-blocked successfully." };
+    return { success: true, message: "User un-blocked successfully." };
   } catch (error) {
-    console.error("Error Un-blocking user:", error);
-
+    console.error("Error un-blocking user:", error);
     throw error;
   }
 };
@@ -76,15 +70,12 @@ const updateUser = async (userData) => {
     const user = await User.findById(userData.userId);
 
     if (!user) {
-      // If the user wasn't found, return a status indicating failure
       return { success: false, message: "User not found." };
     }
 
-    // Update user.name and user.email with the new values
     user.name = userData.name;
     user.email = userData.email;
 
-    // Save the updated user data
     await user.save();
 
     return { success: true, message: "User updated successfully." };
@@ -97,28 +88,35 @@ const updateUser = async (userData) => {
 const getUsers = async () => {
   try {
     const users = await User.find(
-        {},
-        {
-          name: 1,
-          email: 1,
-          blocked: 1,
-          plate: 1,
-          telephone: 1,
-          parking_id: 1,
-          type_subscription: 1,
-          subscription_end_date: 1,
-          arrival_time: 1,
-        }
-    );
+      {},
+      {
+        name: 1,
+        email: 1,
+        blocked: 1,
+        plate: 1,
+        telephone: 1,
+        parking_id: 1,
+        type_subscription: 1,
+        subscription_end_date: 1,
+        arrival_time: 1,
+      }
+    ).populate({
+      path: "type_subscription", // Champ à peupler
+      select: "name -_id", // Récupère uniquement le champ "name" sans l'_id
+    });
 
     return users;
   } catch (error) {
     console.error("Error fetching users:", error);
-
     throw error;
   }
 };
 
-//ajout martin
-
-export { fetchAllUsers, blockUserHelper, unBlockUserHelper, updateUser, getUsers };
+// Exportation des fonctions
+export {
+  fetchAllUsers,
+  blockUserHelper,
+  unBlockUserHelper,
+  updateUser,
+  getUsers,
+};

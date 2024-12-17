@@ -5,7 +5,7 @@ import asyncHandler from "express-async-handler";
 import { BadRequestError } from "base-error-handler";
 
 import User from "../models/userModel.js";
-
+import Sub from "../models/subscriptionModel.js"
 import Avis from "../models/avisModel.js";
 
 import generateAuthToken from "../utils/jwtHelpers/generateAuthToken.js";
@@ -20,7 +20,7 @@ const authUser = asyncHandler(async (req, res) => {
     */
 
   const { email, password } = req.body;
-
+  console.log("Received body:", req.body);
   if (!email || !password) {
     // If email or password is empty, return error
     throw new BadRequestError(
@@ -85,13 +85,9 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
     plate,
     telephone,
-    parking_id,
-    type_subscription,
-    subscription_end_date,
-    arrival_time,
     requires_accessible_parking
   } = req.body;
-
+console.log(req.body)
   // Check if user already exist
   const userExists = await User.findOne({ email });
 
@@ -99,7 +95,6 @@ const registerUser = asyncHandler(async (req, res) => {
   if (userExists) {
     throw new BadRequestError("User already registered - Sign-Up Failed.");
   }
-
   // Store the user data to DB if the user dosen't exist already.
   const user = await User.create({
     name: name,
@@ -108,10 +103,6 @@ const registerUser = asyncHandler(async (req, res) => {
     password: password,
     plate: plate,
     telephone: telephone,
-    parking_id: parking_id,
-    type_subscription: type_subscription,
-    subscription_end_date: subscription_end_date,
-    arrival_time: arrival_time,
     requires_accessible_parking: requires_accessible_parking
   });
 
@@ -207,7 +198,8 @@ const update_Abonnement = asyncHandler(async (req, res) => {
      # Route: PUT /api/v1/user/set-sub
      # Access: PRIVATE
   */
-
+  console.log("Corps de la requête :", req.body);
+  console.log("ID utilisateur :", req.user._id);
   // Find the user data with user id in the request object
   const user = await User.findById(req.user._id);
 
@@ -231,7 +223,7 @@ const update_Abonnement = asyncHandler(async (req, res) => {
 
 const get_Abonnement = asyncHandler(async (req, res) => {
   /*
-     # Desc: Get user profile
+     # Desc: Get user subscription
      # Route: GET /api/v1/user/get-sub
      # Access: PRIVATE
   */
@@ -243,18 +235,22 @@ const get_Abonnement = asyncHandler(async (req, res) => {
     throw new BadRequestError("Email is required.");
   }
 
-  // Chercher dans le modèle User l'utilisateur correspondant à cet email
-  const user = await User.findOne({ email }); // Rechercher par email
+  // Chercher l'utilisateur en populant le champ type_subscription
+  const user = await User.findOne({ email }).populate({
+    path: "type_subscription", // Champ à peupler
+    select: "name -_id", // Récupère uniquement 'name' sans l'_id
+  });
 
   if (user) {
-    // Retourner toutes les données de l'utilisateur
-    res.status(200).json({     
-      type_subscription: user.type_subscription,
-      end_subscription_end_datedate: user.subscription_end_date,}); // Envoyer l'objet utilisateur entier
+    res.status(200).json({
+      type_subscription: user.type_subscription ? user.type_subscription.name : null,
+      subscription_end_date: user.subscription_end_date,
+    });
   } else {
     throw new BadRequestError("User not found.");
   }
 });
+
 
 /********************************add wilfried************************************************* */
 const registerAvis = asyncHandler(async (req, res) => {

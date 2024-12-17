@@ -7,10 +7,6 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    prenom: {
-      type: String,
-      required: true,
-    },
     firstname: {
         type: String,
         required: true
@@ -44,8 +40,9 @@ const userSchema = mongoose.Schema(
         default: "0",
     },
     type_subscription: {
-        type: String,
-        default: null,
+      type: mongoose.Schema.Types.ObjectId, // FK vers Subscription 
+      ref: "Subscription", 
+      default: null
     },
     subscription_end_date: {
         type: Date,
@@ -56,9 +53,8 @@ const userSchema = mongoose.Schema(
         default: null
     },
     requires_accessible_parking: {
-        type: mongoose.Schema.Types.ObjectId, // FK vers Subscription
-        ref: "Subscription", // Nom du modèle cible
-        default: null, // Aucune souscription par défaut
+        type: Boolean, 
+        default: false, // Aucune souscription par défaut
     }
 
 },{

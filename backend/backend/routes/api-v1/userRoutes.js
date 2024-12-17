@@ -22,6 +22,8 @@ import {
 
 import { getAllParkings } from "../../controllers/parkingController.js";
 
+import {getAllSubscription} from "../../controllers/subscriptionController.js"
+
 import {
   userSignUpDataValidation,
   userSignInDataValidation,
@@ -66,7 +68,8 @@ router
 // In the above line, the route is same, above line will use the specified controller according to the type of the request
 
 router.put("/set_sub", requireAuth, verifyUser, update_Abonnement);
-router.post("/get_sub", get_Abonnement);
+router.post("/get_sub", requireAuth, verifyUser, get_Abonnement);
+router.post("/get-all-sub", requireAuth, verifyUser, getAllSubscription);
 
 router.post("/get_parking", requireAuth, verifyUser, getAllParkings);
 
