@@ -22,8 +22,8 @@ import {
   blockUserHelper,
   unBlockUserHelper,
   getUsers,
+  getUsersByParkingId,
   getReview,
-
 } from "../utils/adminHelpers.js";
 
 const authAdmin = asyncHandler(async (req, res) => {
@@ -361,6 +361,23 @@ const deleteParking = asyncHandler(async (req, res) => {
   }
 });
 
+const getUsersByParkingIdData = asyncHandler(async (req, res) => {
+  const { parkingId } = req.query; // récup parking_id depuis la requête
+
+  if (!parkingId) {
+    res.status(400).json({ message: "Parking ID is required" });
+    return;
+  }
+
+  const usersData = await getUsersByParkingId(parkingId);
+
+  if (usersData) {
+    res.status(200).json({ usersData });
+  } else {
+    throw new NotFoundError();
+  }
+});
+
 const getAllReview = asyncHandler(async (req, res) => {
   const usersData = await getReview();
 
@@ -373,7 +390,6 @@ const getAllReview = asyncHandler(async (req, res) => {
     throw new NotFoundError();
 
   }
-
 });
 
 export {
@@ -390,5 +406,6 @@ export {
   getAllUsersData,
   getAllReview,
   addParking,
-  deleteParking
+  deleteParking,
+  getUsersByParkingIdData,
 };

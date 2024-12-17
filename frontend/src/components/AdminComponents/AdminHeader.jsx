@@ -51,8 +51,7 @@ const AdminHeader = () => {
               {adminInfo ? (
                 <>
                   <LinkContainer to="/admin/monitoring">
-                    <Nav.Link>Vue Parking</Nav.Link>
-
+                    <Nav.Link>Dashboard Parking</Nav.Link>
                   </LinkContainer>                
                   <LinkContainer to="/admin/review">
                     <Nav.Link>Avis Utilisateurs</Nav.Link>

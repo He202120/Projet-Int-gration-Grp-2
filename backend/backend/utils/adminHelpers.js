@@ -101,6 +101,7 @@ const getUsers = async () => {
         {},
         {
           name: 1,
+          firstname: 1,
           email: 1,
           blocked: 1,
           plate: 1,
@@ -109,6 +110,7 @@ const getUsers = async () => {
           type_subscription: 1,
           subscription_end_date: 1,
           arrival_time: 1,
+          requires_accessible_parking: 1,
         }
     );
 
@@ -119,6 +121,35 @@ const getUsers = async () => {
     throw error;
   }
 };
+
+const getUsersByParkingId = async (parkingId) => {
+    try {
+        const users = await User.find(
+            { parking_id: parkingId }, // Condition pour filtrer par parking_id
+            {
+                name: 1,
+                firstname: 1,
+                email: 1,
+                blocked: 1,
+                plate: 1,
+                telephone: 1,
+                parking_id: 1,
+                type_subscription: 1,
+                subscription_end_date: 1,
+                arrival_time: 1,
+                requires_accessible_parking: 1,
+            }
+        );
+
+        return users;
+    } catch (error) {
+        console.error("Error fetching users by parking ID:", error);
+
+        throw error;
+    }
+};
+
+
 
 const getReview = async (req, res) => {
   try {
@@ -148,6 +179,4 @@ const getReview = async (req, res) => {
   }
 };
 
-//ajout martin
-
-export { fetchAllUsers, blockUserHelper, unBlockUserHelper, updateUser, getUsers,getReview };
+export { fetchAllUsers, blockUserHelper, unBlockUserHelper, updateUser, getUsers, getReview, getUsersByParkingId };
