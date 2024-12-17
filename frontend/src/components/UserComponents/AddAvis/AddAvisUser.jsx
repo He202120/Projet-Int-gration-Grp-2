@@ -38,7 +38,7 @@ const Advis = () => {
       setAvisList(responses);
     } catch (err) {
        console.error(err);
-      toast.error("Impossible de charger les avis.");
+      // toast.error("Impossible de charger les avis.");
     } finally {
       setIsLoadingAvis(false); // Terminer le chargement des avis
     }

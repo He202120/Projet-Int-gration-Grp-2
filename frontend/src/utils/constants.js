@@ -21,6 +21,7 @@ export const ADMIN_UPDATE_USER_URL = "/api/v1/admin/update-user";
 export const ADMIN_DELETE_USER_URL = "/api/v1/admin/delete-user";
 export const USER_ADD_AVIS_URL = "/api/v1/user/avis";
 export const ADMIN_USERS_DATA_GET_URL = "/api/v1/admin/get-info-users";
+export const  ADMIN_REVIEW_DATA_URL = "/api/v1/admin/get-review";
 export const ADMIN_PARKINGS_DATA_GET_URL = "/api/v1/admin/get-parkings";
 export const PROFILE_IMAGE_DIR_PATH = "//localhost:5000/UserProfileImages/";
 export const ADMIN_USERS_BY_PARKING_FETCH_URL = "/api/v1/admin/get-users-by-parking";

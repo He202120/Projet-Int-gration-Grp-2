@@ -26,6 +26,7 @@ import {
   unBlockUser,
   deleteUserData,
   getAllUsersData,
+  getAllReview,
   addParking,
   deleteParking,
   getUsersByParkingIdData,
@@ -98,6 +99,8 @@ router.put(
 
 router.post("/get-info-users", requireAuth, verifyAdmin, getAllUsersData);
 
+router.post("/get-review", requireAuth, verifyAdmin, getAllReview);
+
 router.post("/get-parkings", requireAuth, verifyAdmin, getParkingsData);
 
 //* ===================== Parking Management Routes ==================
@@ -113,5 +116,4 @@ router.delete(
 );
 
 router.post("/get-users-by-parking", requireAuth, verifyAdmin, getUsersByParkingIdData);
-
 export default router;
