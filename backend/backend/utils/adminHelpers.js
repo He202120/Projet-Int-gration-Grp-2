@@ -16,7 +16,10 @@ const fetchAllUsers = async () => {
         subscription_end_date: 1,
         arrival_time: 1,
       }
-    );
+    ).populate({
+      path: "type_subscription", // Champ à peupler
+      select: "name -_id", // Récupère uniquement le champ "name" sans l'_id
+    });
     console.log(users);
     return users;
   } catch (error) {
@@ -88,6 +91,7 @@ const getUsers = async () => {
       {},
       {
         name: 1,
+        firstname: 1,
         email: 1,
         blocked: 1,
         plate: 1,
@@ -96,6 +100,7 @@ const getUsers = async () => {
         type_subscription: 1,
         subscription_end_date: 1,
         arrival_time: 1,
+        requires_accessible_parking: 1,
       }
     ).populate({
       path: "type_subscription", // Champ à peupler
