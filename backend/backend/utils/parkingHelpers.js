@@ -5,7 +5,7 @@ import User from "../models/userModel.js";
 const fetchAllParkings = async (req, res) => {
   try {
     const parkings = await Parking.find(); // Fetch all parkings from the database
-    const users = await User.find({}, { name: 1, parking: 1 }); // Fetch all users inside a parking
+    const users = await User.find({}, { name: 1, parking_id: 1 }); // Fetch all users inside a parking
     if (parkings.length === 0) {
       return res.status(404).json({ message: "No parking records found." });
     }

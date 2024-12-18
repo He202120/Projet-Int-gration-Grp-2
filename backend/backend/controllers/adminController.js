@@ -24,6 +24,7 @@ import {
   getUsers,
   getUsersByParkingId,
   getReview,
+  getParkingData,
 } from "../utils/adminHelpers.js";
 
 const authAdmin = asyncHandler(async (req, res) => {
@@ -298,6 +299,19 @@ const getAllUsersData = asyncHandler(async (req, res) => {
   }
 });
 
+//Martin modif
+
+const getAllDataParking = asyncHandler(async (req, res) => {
+  const usersDataParking = await getParkingData();
+
+  if (usersDataParking) {
+    res.status(200).json({ usersDataParking });
+  } else {
+    throw new NotFoundError();
+  }
+});
+
+
 const addParking = asyncHandler(async (req, res) => {
   /*
      # Desc: Register new parking
@@ -408,4 +422,5 @@ export {
   addParking,
   deleteParking,
   getUsersByParkingIdData,
+  getAllDataParking,
 };

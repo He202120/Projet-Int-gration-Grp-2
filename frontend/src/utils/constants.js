@@ -27,3 +27,4 @@ export const  ADMIN_REVIEW_DATA_URL = "/api/v1/admin/get-review";
 export const ADMIN_PARKINGS_DATA_GET_URL = "/api/v1/admin/get-parkings";
 export const PROFILE_IMAGE_DIR_PATH = "//localhost:5000/UserProfileImages/";
 export const ADMIN_USERS_BY_PARKING_FETCH_URL = "/api/v1/admin/get-users-by-parking";
+export const ADMIN_DATAPARKING_GET_URL = "/api/v1/admin/get-data-by-parking"

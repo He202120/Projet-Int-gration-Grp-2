@@ -18,6 +18,8 @@
     "@mui/material": "^6.1.10",
     "@mui/x-data-grid": "^7.23.1",
     "@reduxjs/toolkit": "^1.9.5",
+    "ag-charts-community": "^11.0.0",
+    "ag-charts-react": "^11.0.0",
     "bootstrap": "^5.3.1",
     "mapbox-gl": "^3.7.0",
     "material-react-table": "^2.13.0",

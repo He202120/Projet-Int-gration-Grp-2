@@ -32,6 +32,7 @@ import {
   addParking,
   deleteParking,
   getUsersByParkingIdData,
+  getAllDataParking,
 } from "../../controllers/adminController.js";
 
 // Data validation configuration
@@ -103,6 +104,8 @@ router.post("/get-info-users", requireAuth, verifyAdmin, getAllUsersData);
 
 router.post("/get-review", requireAuth, verifyAdmin, getAllReview);
 
+router.post("/get-data-by-parking", requireAuth, verifyAdmin, getAllDataParking);
+
 router.post("/get-parkings", requireAuth, verifyAdmin, getParkingsData);
 
 router.post("/put-sub", requireAuth, verifyAdmin, putSubscriptionData);
@@ -120,4 +123,5 @@ router.delete(
 );
 
 router.post("/get-users-by-parking", requireAuth, verifyAdmin, getUsersByParkingIdData);
+
 export default router;

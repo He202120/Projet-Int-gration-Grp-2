@@ -36,6 +36,7 @@ import MonitoringScreen from "./screens/adminScreens/MonitoringScreen.jsx";
 import ReviewScreen from "./screens/adminScreens/ReviewScreen.jsx";
 import HandleParking from "./screens/adminScreens/HandleParkingScreen.jsx";
 import SubscriptionScreen from "./screens/adminScreens/SubscriptionScreen.jsx";
+import Dashboard from "./screens/adminScreens/Dashboard.jsx"
 // import ReviewScreen from "./screens/adminScreens/ReviewScreen.jsx";
 
 
@@ -71,6 +72,7 @@ const router = createBrowserRouter(
 
       {/* ADMIN PRIVATE ROUTES */}
       <Route path="" element={<AdminPrivateRoutes />}>
+        <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/profile" element={<AdminProfileScreen />} />
         <Route path="/admin/manage-users" element={<UsersManagementScreen />} />
         <Route path="/admin/monitoring" element={<MonitoringScreen />} />

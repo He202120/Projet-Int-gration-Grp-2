@@ -50,6 +50,9 @@ const AdminHeader = () => {
             <Nav className="ms-auto">
               {adminInfo ? (
                 <>
+                  <LinkContainer to="/admin/dashboard">
+                    <Nav.Link>Dashboard</Nav.Link>
+                  </LinkContainer>
                   <LinkContainer to="/admin/monitoring">
                     <Nav.Link>Dashboard Parking</Nav.Link>
                   </LinkContainer>                

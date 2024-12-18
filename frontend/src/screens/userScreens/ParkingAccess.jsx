@@ -128,7 +128,7 @@ const ParkingAccess = () => {
   const getIcon = (parkingPlaces, id, max) => {
     var takenPlaces = 0;
     for (let taken of takenParkings) {
-      if (taken.parking == id) {
+      if (taken.parking_id == id) {
         takenPlaces += 1;
       }
     }
@@ -175,7 +175,7 @@ const ParkingAccess = () => {
           }
           var takenPlaces = 0;
           for (let taken of takenParkings) {
-            if (taken.parking == parking._id) {
+            if (taken.parking_id == parking._id) {
               takenPlaces += 1;
             }
           }
@@ -244,7 +244,7 @@ const ParkingAccess = () => {
       var takenPlaces = 0;
       for (let taken of takenParkings) {
         console.log(taken);
-        if (taken.parking === id) {
+        if (taken.parking_id === id) {
           takenPlaces += 1;
         }
       }
@@ -260,7 +260,7 @@ const ParkingAccess = () => {
     if (places === undefined) {
       var takenPlaces = 0;
       for (let taken of takenParkings) {
-        if (taken.parking == id) {
+        if (taken.parking_id == id) {
           takenPlaces += 1;
         }
       }

@@ -1,5 +1,6 @@
 import User from "../models/userModel.js";
 import Avis from "../models/avisModel.js";
+import ParkingData from "../models/ParkingData.js";
 
 const fetchAllUsers = async () => {
   try {
@@ -139,6 +140,25 @@ const getUsersByParkingId = async (parkingId) => {
     }
 };
 
+const getParkingData = async (req, res) => {
+  try {
+      const dataparking = await ParkingData.find(
+          {},
+
+          {
+            parking_name: 1,
+            date: 1,
+            time: 1,
+            plate: 1,
+          }
+      );
+
+      return dataparking;
+  } catch (error) {
+      console.error("Error fetching parking data :", error);
+      throw error;
+  }
+};
 
 
 const getReview = async (req, res) => {
@@ -154,7 +174,7 @@ const getReview = async (req, res) => {
         comment: 1,
         createdAt: 1,
       }
-    
+
     );
     // Vérification si aucun avis n'est trouvé
     if (dispAvis.length === 0) {
@@ -169,4 +189,4 @@ const getReview = async (req, res) => {
   }
 };
 
-export { fetchAllUsers, blockUserHelper, unBlockUserHelper, updateUser, getUsers, getReview, getUsersByParkingId };
+export { fetchAllUsers, blockUserHelper, unBlockUserHelper, updateUser, getUsers, getReview, getUsersByParkingId, getParkingData,};

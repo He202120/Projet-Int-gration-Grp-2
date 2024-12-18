@@ -15,8 +15,8 @@ import {
   ADMIN_ADD_PARKING,
   ADMIN_DELETE_PARKING,
   ADMIN_ADD_SUBSCRIPTION,
+  ADMIN_DATAPARKING_GET_URL,
   ADMIN_USERS_BY_PARKING_FETCH_URL,
-
 } from "../utils/constants.js";
 
 export const adminApiSlice = apiSlice.injectEndpoints({
@@ -133,6 +133,12 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
       }),
     }),
+    getParkingData: builder.mutation({  
+      query: () => ({
+          url: ADMIN_DATAPARKING_GET_URL,
+          method: 'POST',
+      }),
+    }),
   }),
 });
 
@@ -153,4 +159,5 @@ export const {
   useDeleteParkingMutation,
   useAddSubMutation,
   useGetUsersByParkingIdMutation,
+  useGetParkingDataMutation,
 } = adminApiSlice;
