@@ -11,55 +11,6 @@ import User from "../models/userModel.js";
 const router = express.Router();
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-router.post('/check-plate', async (req, res) => {
-    const { plate } = req.body;
-    console.log('Plaque reçue:', plate);
-
-    if (!plate) {
-        return res.status(400).json({ message: 'La plaque est requise.' });
-    }
-
-    try {
-        // Normaliser la plaque détectée (convertir en majuscules et retirer le "1-" si présent)
-        let normalizedPlate = plate.toUpperCase(); // Convertir en majuscules
-        if (normalizedPlate.startsWith("1-")) {
-            normalizedPlate = normalizedPlate.slice(2); // Enlever le "1-" du début
-        }
-
-        console.log('Plaque normalisée:', normalizedPlate);
-
-        // Chercher l'utilisateur par la plaque normalisée (sans tenir compte de la casse ni du "1-")
-        let user = await User.findOne({
-            $or: [
-                { plate: { $regex: new RegExp(`^${normalizedPlate}$`, 'i') } },  // Plaque sans 1- (casse insensible)
-                { plate: { $regex: new RegExp(`^1-${normalizedPlate}$`, 'i') } }  // Plaque avec 1- (casse insensible)
-            ]
-        });
-
-        if (!user) {
-            return res.status(404).json({ message: 'Utilisateur non trouvé.' });
-        }
-
-        console.log('Utilisateur trouvé:', user);
-
-        // Mettre à jour les champs parking et arrival
-        user.arrival_time = new Date(); // Mettre à jour avec la date et heure actuelle
-
-        const updatedUser = await user.save();
-
-        console.log('Utilisateur mis à jour:', updatedUser);
-
-        // Réponse avec les informations mises à jour
-        return res.status(200).json({ 
-            success: true, 
-            message: 'Utilisateur vérifié et parking mis à jour.', 
-            user: updatedUser 
-        });
-    } catch (err) {
-        console.error('Erreur:', err);
-        return res.status(500).json({ message: 'Erreur interne', error: err.message });
-    }
-});
 
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -96,18 +47,19 @@ router.post('/parking-data', async (req, res) => {
 });
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 router.post('/update-parking', async (req, res) => {
     const { parking_id, plate } = req.body;
 
-    if (!parking_id || !plate) {
-        return res.status(400).json({ message: 'Le parking_id et la plaque sont requis.' });
+    if (!plate) {
+        return res.status(400).json({ message: 'La plaque est requise.' });
     }
 
     try {
         // Normaliser la plaque détectée
-        let normalizedPlate = plate.toUpperCase();
+        let normalizedPlate = plate.toUpperCase(); 
         if (normalizedPlate.startsWith("1-")) {
-            normalizedPlate = normalizedPlate.slice(2); // Enlever le "1-" du début
+            normalizedPlate = normalizedPlate.slice(2);
         }
 
         console.log('Plaque normalisée:', normalizedPlate);
@@ -115,8 +67,8 @@ router.post('/update-parking', async (req, res) => {
         // Chercher l'utilisateur correspondant à la plaque
         let user = await User.findOne({
             $or: [
-                { plate: { $regex: new RegExp(`^${normalizedPlate}$`, 'i') } },  // Plaque sans 1- (casse insensible)
-                { plate: { $regex: new RegExp(`^1-${normalizedPlate}$`, 'i') } }  // Plaque avec 1- (casse insensible)
+                { plate: { $regex: new RegExp(`^${normalizedPlate}$`, 'i') } },
+                { plate: { $regex: new RegExp(`^1-${normalizedPlate}$`, 'i') } }
             ]
         });
 
@@ -126,24 +78,44 @@ router.post('/update-parking', async (req, res) => {
 
         console.log('Utilisateur trouvé:', user);
 
-        // Mettre à jour le champ parking_id
-        user.parking_id = parking_id;
+        // Vérifier l'état actuel du parking de l'utilisateur
+        if (user.parking_id === "675efefe982debb80d30bf76") {
+            // L'utilisateur quitte le parking
+            console.log("Utilisateur quitte le parking, réinitialisation des données.");
+            user.parking_id = "0";  // Réinitialiser l'ID du parking
+            user.arrival_time = null;  // Réinitialiser l'heure d'arrivée
+            user.exit_time = new Date();  // Enregistrer l'heure de sortie
+        } else {
+            // Vérifier si l'utilisateur a récemment quitté le parking
+            if (user.exit_time && new Date() - new Date(user.exit_time) < 60000) { // 1 minute (ajuster selon les besoins)
+                return res.status(400).json({ message: 'L\'utilisateur vient de sortir, veuillez attendre avant de revenir.' });
+            }
 
+            // L'utilisateur entre dans le parking
+            console.log("Utilisateur entre dans le parking.");
+            user.parking_id = parking_id;  // Mettre à jour l'ID du parking
+            user.arrival_time = new Date();  // Mettre à jour l'heure d'arrivée
+            user.exit_time = null;  // Réinitialiser l'heure de sortie
+        }
+
+        // Sauvegarder les modifications dans la base de données
         const updatedUser = await user.save();
-
         console.log('Utilisateur mis à jour:', updatedUser);
 
-        // Répondre avec le statut de succès
+        // Répondre avec les informations mises à jour
         return res.status(200).json({
             success: true,
-            message: 'parking_id mis à jour pour l\'utilisateur.',
+            message: user.parking_id === "0" ? 'Utilisateur sort du parking.' : 'Utilisateur entre dans le parking.',
             user: updatedUser
         });
+
     } catch (err) {
         console.error('Erreur:', err);
         return res.status(500).json({ message: 'Erreur interne', error: err.message });
     }
 });
+
+
 
 
 //* ==================== V1 Routes ====================

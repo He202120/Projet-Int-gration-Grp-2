@@ -1,13 +1,10 @@
 import threading
 import serial
-from read_plate import detect_and_read_plate
+from read_plate import capture_from_camera
 
-def process_plate(image_path):
-    detect_and_read_plate(image_path)
-    print("Plate detection finished.")
 
 # Configurez le port série
-pico_port = 'COM4'
+pico_port = 'COM8'
 baud_rate = 9600
 
 try:
@@ -21,7 +18,7 @@ try:
                     print("Vehicle detected!")
 
                     # Démarrer un thread pour exécuter la fonction en parallèle
-                    thread = threading.Thread(target=process_plate, args=('C:\\Users\\Martin\\Desktop\\3eme Ephec\\PythonInt\\voiture7.jpg',))
+                    thread = threading.Thread(target=capture_from_camera)
                     thread.start()
 
                     # Le programme continue pendant que la fonction de détection s'exécute dans le thread

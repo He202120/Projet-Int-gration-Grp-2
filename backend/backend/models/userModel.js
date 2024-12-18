@@ -52,6 +52,10 @@ const userSchema = mongoose.Schema(
         type: Date,
         default: null
     },
+    exit_time: {
+      type: Date,
+      default: null
+    },
     requires_accessible_parking: {
         type: Boolean, 
         default: false, // Aucune souscription par défaut
