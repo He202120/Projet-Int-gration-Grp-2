@@ -42,8 +42,6 @@ const ProfileScreen = () => {
       try {
         const formData = new FormData();
 
-        formData.append("name", name);
-        formData.append("email", email);
         formData.append("plate", plate);
         formData.append("password", password);
         formData.append("profileImage", profileImage);
@@ -91,16 +89,6 @@ const ProfileScreen = () => {
       </h3>
 
       <Form onSubmit={submitHandler}>
-        <Form.Group className="my-2" controlId="name">
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter name here..."
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
         <Form.Group className="my-2" controlId="plate">
           <Form.Label>Plate</Form.Label>
           <Form.Control

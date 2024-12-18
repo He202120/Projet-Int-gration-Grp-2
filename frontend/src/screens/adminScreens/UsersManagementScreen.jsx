@@ -28,7 +28,6 @@ const AdminHomeScreen = () => {
       console.error("Error fetching users:", err);
     }
   }, []);
-  console.log(usersData)
 
   return (
     <div>

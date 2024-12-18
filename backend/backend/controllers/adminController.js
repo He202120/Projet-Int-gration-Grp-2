@@ -195,7 +195,6 @@ const updateAdminProfile = asyncHandler(async (req, res) => {
 
 const getAllUsers = asyncHandler(async (req, res) => {
   const usersData = await fetchAllUsers();
-  console.log(usersData);
   if (usersData) {
     res.status(200).json({ usersData });
   } else {
