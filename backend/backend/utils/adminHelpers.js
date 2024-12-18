@@ -16,10 +16,7 @@ const fetchAllUsers = async () => {
         subscription_end_date: 1,
         arrival_time: 1,
       }
-    ).populate({
-      path: "type_subscription", // Champ à peupler
-      select: "name -_id", // Récupère uniquement le champ "name" sans l'_id
-    });
+    );
     console.log(users);
     return users;
   } catch (error) {
