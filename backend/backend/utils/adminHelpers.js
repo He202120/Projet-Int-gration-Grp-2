@@ -15,6 +15,7 @@ const fetchAllUsers = async () => {
         type_subscription: 1,
         subscription_end_date: 1,
         arrival_time: 1,
+        requires_accessible_parking: 1,
       }
     ).populate({
       path: "type_subscription", // Champ à peupler

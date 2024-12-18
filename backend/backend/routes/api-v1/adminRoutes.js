@@ -126,6 +126,6 @@ router.delete(
   validateRequest,
   deleteParking
 );
-router.delete("/delete-avis", requireAuth, verifyAdmin, validateRequest, deleteAvisData);
+router.delete("/delete-avis", requireAuth, verifyAdmin, deleteAvisData);
 router.post("/get-users-by-parking", requireAuth, verifyAdmin, getUsersByParkingIdData);
 export default router;

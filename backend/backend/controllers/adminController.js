@@ -393,7 +393,7 @@ const getAllReview = asyncHandler(async (req, res) => {
   }
 });
 const deleteAvisData = asyncHandler(async (req, res) => {
-  const userId = req.body.avisId; // On attend un userId dans la requête
+  const userId = req.body.avisId; // On attend un userId dans la requête 
 
   if (!userId) {
     throw new BadRequestError(

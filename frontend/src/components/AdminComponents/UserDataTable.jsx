@@ -114,8 +114,10 @@ const UsersDataTable = ({ users }) => {
           <tr>
             <th>#</th>
             <th>Name</th>
+            <th>Firstname</th>
             <th>Email</th>
             <th>Plate</th>
+            <th>requires_accessible_parking</th>
             <th>Status</th>
             <th>Update</th>
             <th>Delete</th>
@@ -130,8 +132,10 @@ const UsersDataTable = ({ users }) => {
             <tr key={index}>
               <td>{index + 1}</td>
               <td>{user.name}</td>
+              <td>{user.firstname}</td>
               <td>{user.email}</td>
               <td>{user.plate}</td>
+              <td>{user.requires_accessible_parking? "☒" : "☑"}</td>              
               <td>{user.blocked ? "☒" : "☑"}</td>
               <td>
                 <Button

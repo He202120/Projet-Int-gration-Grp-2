@@ -14,7 +14,7 @@ import {
   ADMIN_REVIEW_DATA_URL,
   ADMIN_ADD_PARKING,
   ADMIN_DELETE_PARKING,
-  ADMIN_DELETE_Avis_URL,
+  ADMIN_DELETE_AVIS_URL,
   ADMIN_ADD_SUBSCRIPTION,
   ADMIN_USERS_BY_PARKING_FETCH_URL,
   ADMIN_GET_ALL_SUBRSCRIPTION,
@@ -126,7 +126,9 @@ export const adminApiSlice = apiSlice.injectEndpoints({
     
     DeleteAvis: builder.mutation({
       query: (data) => ({
-        url: ADMIN_DELETE_Avis_URL,
+        url: ADMIN_DELETE_AVIS_URL,
+        method: "DELETE",
+        body: data,
       }),
     }),
 
