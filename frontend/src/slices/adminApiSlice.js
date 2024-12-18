@@ -14,12 +14,12 @@ import {
   ADMIN_REVIEW_DATA_URL,
   ADMIN_ADD_PARKING,
   ADMIN_DELETE_PARKING,
+  ADMIN_DELETE_Avis_URL,
   ADMIN_ADD_SUBSCRIPTION,
   ADMIN_USERS_BY_PARKING_FETCH_URL,
   ADMIN_GET_ALL_SUBRSCRIPTION,
   ADMIN_DELETE_SUBSCRIPTION,
   ADMIN_UPDATE_PRICE,
-
 } from "../utils/constants.js";
 
 export const adminApiSlice = apiSlice.injectEndpoints({
@@ -123,6 +123,13 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    
+    DeleteAvis: builder.mutation({
+      query: (data) => ({
+        url: ADMIN_DELETE_Avis_URL,
+      }),
+    }),
+
     AddSub: builder.mutation({
       query: (data) => ({
         url: ADMIN_ADD_SUBSCRIPTION,
@@ -174,6 +181,7 @@ export const {
   useAddParkingMutation,
   useGetReviewsDataMutation,
   useDeleteParkingMutation,
+  useDeleteAvisMutation,
   useAddSubMutation,
   useGetAllAdminSubscriptionMutation,
   useDeleteSubscriptionMutation,
