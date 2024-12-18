@@ -31,6 +31,7 @@ import {
   getAllReview,
   addParking,
   deleteParking,
+  deleteAvisData,
   getUsersByParkingIdData,
 } from "../../controllers/adminController.js";
 
@@ -99,6 +100,7 @@ router.put(
   updateUserData
 );
 
+
 router.post("/get-info-users", requireAuth, verifyAdmin, getAllUsersData);
 
 router.post("/get-review", requireAuth, verifyAdmin, getAllReview);
@@ -124,6 +126,6 @@ router.delete(
   validateRequest,
   deleteParking
 );
-
+router.delete("/delete-avis", requireAuth, verifyAdmin, validateRequest, deleteAvisData);
 router.post("/get-users-by-parking", requireAuth, verifyAdmin, getUsersByParkingIdData);
 export default router;
