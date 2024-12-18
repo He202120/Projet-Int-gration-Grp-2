@@ -63,8 +63,17 @@ const ReviewScreen = () => {
   };
 
   const handleDelete = async (avisId) => {
-    console.log(avisId);
-   
+    // Afficher une boîte de dialogue de confirmation
+    const confirmDelete = window.confirm(
+      "Êtes-vous sûr de vouloir supprimer cet avis ? Cette action est irréversible."
+    );
+
+    // Si l'utilisateur annule, on arrête la fonction
+    if (!confirmDelete) {
+      return;
+    }
+
+    // Continuer avec la suppression si confirmé
     setLoadingAvisId(avisId);
     try {
       await deleteAvis({ avisId });
