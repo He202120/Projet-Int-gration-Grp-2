@@ -1,60 +1,107 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Table } from "react-bootstrap";
 import FormContainer from "../../components/FormContainer";
 import { toast } from "react-toastify";
-import { useAddSubMutation } from "../../slices/adminApiSlice";
+import {
+  useAddSubMutation,
+  useGetAllAdminSubscriptionMutation,
+  useDeleteSubscriptionMutation,
+  useUpdateSubPriceMutation, // Ajout de la mutation
+} from "../../slices/adminApiSlice";
 
 const SubscriptionScreen = () => {
-  // États locaux pour les champs du formulaire
+  // États pour le formulaire
   const [name, setName] = useState("");
-  const [timeValue, setTimeValue] = useState(0); // Valeur numérique pour la durée
-  const [timeUnit, setTimeUnit] = useState("Day"); // Unité de temps sélectionnée
-  const [time, setTime] = useState(""); // Valeur combinée (ex: "7Day")
+  const [timeValue, setTimeValue] = useState(0);
+  const [timeUnit, setTimeUnit] = useState("Day");
+  const [time, setTime] = useState("");
   const [price, setPrice] = useState(0);
-  const [addsub, { isLoading }] = useAddSubMutation();
 
-  // Effet pour mettre à jour "time" lorsque timeValue ou timeUnit change
+  // États pour les abonnements
+  const [allSubscriptions, setAllSubscriptions] = useState([]);
+  const [updatedPrice, setUpdatedPrice] = useState({}); // Nouvel état pour gérer le prix temporaire
+
+  // Mutations API
+  const [getAllSub] = useGetAllAdminSubscriptionMutation();
+  const [addSub] = useAddSubMutation();
+  const [deleteSubscription] = useDeleteSubscriptionMutation();
+  const [updatePrice] = useUpdateSubPriceMutation(); // Mutation pour l'update du prix
+
+  // Récupération des abonnements
+  const fetchAllSubscriptions = async () => {
+    try {
+      const result = await getAllSub().unwrap();
+      setAllSubscriptions(result.sub);
+    } catch (err) {
+      toast.error("Erreur lors de la récupération des abonnements.");
+    }
+  };
+
   useEffect(() => {
     setTime(`${timeValue}${timeUnit}`);
+    fetchAllSubscriptions();
   }, [timeValue, timeUnit]);
 
   // Gestion de la soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const subs = {
-      name: name,
-      time: time,
-      price: price,
-    };
-
-    // Validation des données
     if (!name || timeValue <= 0 || price <= 0) {
       toast.error("Veuillez remplir tous les champs correctement.");
       return;
     }
 
-    // Simuler une action avec les données (comme un envoi à un serveur)
     try {
-      console.log(subs);
-      const responseFromApiCall = await addsub({ name, time, price }).unwrap();
+      await addSub({ name, time, price }).unwrap();
+      toast.success("Abonnement ajouté avec succès !");
+      setName("");
+      setTimeValue(0);
+      setTimeUnit("Day");
+      setPrice(0);
+      fetchAllSubscriptions(); // Actualiser la liste
     } catch (err) {
       toast.error(err?.data?.errors[0]?.message || err?.error);
     }
+  };
 
-    // Réinitialiser le formulaire
-    setName("");
-    setTimeValue(0);
-    setTimeUnit("Day");
-    setPrice(0);
-    setTime("");
+  // Gestion de la suppression d'un abonnement
+  const handleDelete = async (id) => {
+    if (window.confirm("Voulez-vous vraiment supprimer cet abonnement ?" + id)) {
+      try {
+        await deleteSubscription({ id }).unwrap();
+        toast.success("Abonnement supprimé avec succès !");
+        fetchAllSubscriptions();
+      } catch (err) {
+        toast.error("Erreur lors de la suppression.");
+      }
+    }
+  };
+
+  // Gestion de la mise à jour du prix
+  const handlePriceChange = (id, newPrice) => {
+    setUpdatedPrice({ ...updatedPrice, [id]: newPrice });
+  };
+
+  const handleUpdatePrice = async (id) => {
+    const newPrice = updatedPrice[id];
+    if (!newPrice || newPrice <= 0) {
+      toast.error("Le prix doit être valide.");
+      return;
+    }
+
+    try {
+      await updatePrice({ id, price: newPrice }).unwrap();
+      toast.success("Prix mis à jour avec succès !");
+      fetchAllSubscriptions(); // Actualiser la liste
+    } catch (err) {
+      toast.error("Erreur lors de la mise à jour du prix.");
+    }
   };
 
   return (
     <FormContainer>
       <h1>Créer un Abonnement</h1>
       <Form onSubmit={handleSubmit}>
-        {/* Champ pour le nom de l'abonnement */}
         <Form.Group controlId="subscriptionName">
           <Form.Label>Nom de l'abonnement</Form.Label>
           <Form.Control
@@ -65,7 +112,6 @@ const SubscriptionScreen = () => {
           />
         </Form.Group>
 
-        {/* Champ pour le temps */}
         <Form.Group controlId="time">
           <Form.Label>Durée</Form.Label>
           <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
@@ -86,7 +132,6 @@ const SubscriptionScreen = () => {
           </div>
         </Form.Group>
 
-        {/* Champ pour le prix */}
         <Form.Group controlId="price">
           <Form.Label>Prix (en EUR)</Form.Label>
           <Form.Control
@@ -97,11 +142,71 @@ const SubscriptionScreen = () => {
           />
         </Form.Group>
 
-        {/* Bouton de soumission */}
         <Button type="submit" variant="primary" className="mt-3">
           Soumettre
         </Button>
       </Form>
+
+      {/* Table pour afficher les abonnements */}
+      <h2 className="mt-5">Liste des Abonnements</h2>
+      <Table striped bordered hover responsive>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nom</th>
+            <th>Durée</th>
+            <th>Prix</th>
+            <th>Update</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {allSubscriptions.length > 0 ? (
+            allSubscriptions.map((subscription, index) => (
+              <tr key={subscription._id}>
+                <td>{index + 1}</td>
+                <td>{subscription.name}</td>
+                <td>{subscription.time}</td>
+                <td>
+                  <Form.Control
+                    type="number"
+                    value={updatedPrice[subscription._id] || subscription.price}
+                    onChange={(e) =>
+                      handlePriceChange(subscription._id, Number(e.target.value))
+                    }
+                    style={{ width: "80px" }}
+                  />
+                  €
+                </td>
+                <td>
+                  <Button
+                    variant="warning"
+                    size="sm"
+                    onClick={() => handleUpdatePrice(subscription._id)}
+                  >
+                    Update
+                  </Button>
+                </td>
+                <td>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => handleDelete(subscription._id)}
+                  >
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6" className="text-center">
+                Aucun abonnement disponible.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
     </FormContainer>
   );
 };

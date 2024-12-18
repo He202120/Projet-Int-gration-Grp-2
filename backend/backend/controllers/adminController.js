@@ -5,6 +5,7 @@ import asyncHandler from "express-async-handler";
 import AdminModel from "../models/adminModel.js";
 import User from "../models/userModel.js";
 import Parking from "../models/parkingModel.js";
+import Avis from "../models/avisModel.js";
 
 import {
   BadRequestError,
@@ -195,7 +196,6 @@ const updateAdminProfile = asyncHandler(async (req, res) => {
 
 const getAllUsers = asyncHandler(async (req, res) => {
   const usersData = await fetchAllUsers();
-
   if (usersData) {
     res.status(200).json({ usersData });
   } else {
@@ -405,6 +405,25 @@ const getAllReview = asyncHandler(async (req, res) => {
 
   }
 });
+const deleteAvisData = asyncHandler(async (req, res) => {
+  const userId = req.body.avisId; // On attend un userId dans la requête 
+
+  if (!userId) {
+    throw new BadRequestError(
+      "UserId not received in request - Avis deletion failed."
+    );
+  }
+
+  // Suppression des avis correspondant au userId
+  const deleteAvis = await Avis.findByIdAndDelete(userId);
+
+  if (deleteAvis) {
+    res.status(200).json({ message: "avisuser deleted successfully." });
+  } else {
+    throw new BadRequestError("avisunser not found or already deleted.");
+  }
+});
+
 
 export {
   authAdmin,
@@ -421,6 +440,7 @@ export {
   getAllReview,
   addParking,
   deleteParking,
+  deleteAvisData,
   getUsersByParkingIdData,
   getAllDataParking,
 };

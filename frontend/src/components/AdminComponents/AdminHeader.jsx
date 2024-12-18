@@ -60,11 +60,11 @@ const AdminHeader = () => {
                     <Nav.Link>Avis Utilisateurs</Nav.Link>
                   </LinkContainer>
                   <LinkContainer to="/admin/handle">
-                    <Nav.Link>Gestion des parkings</Nav.Link>
+                    <Nav.Link>Gestion des Parkings</Nav.Link>
 
                   </LinkContainer>
                   <LinkContainer to="/admin/sub">
-                    <Nav.Link>New Subscription</Nav.Link>
+                    <Nav.Link>Nouvel Abonnement</Nav.Link>
                   </LinkContainer>
 
                   <NavDropdown title={adminInfo.name} id="userName">

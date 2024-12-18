@@ -169,6 +169,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     // Update the user with new data if found or keep the old data itself.
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
+    user.plate = req.body.plate || user.plate;
 
     // If request has new password, update the user with the new password
     if (req.body.password) {
@@ -183,8 +184,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
     // Send the response with updated user data
     res.status(200).json({
-      name: updatedUserData.name,
-      email: updatedUserData.email,
+      plate: updatedUserData.plate,
       profileImageName: updatedUserData.profileImageName,
     });
   } else {

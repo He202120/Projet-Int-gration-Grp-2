@@ -114,12 +114,13 @@ const UsersDataTable = ({ users }) => {
           <tr>
             <th>#</th>
             <th>Name</th>
+            <th>Firstname</th>
             <th>Email</th>
             <th>Plate</th>
+            <th>requires_accessible_parking</th>
             <th>Status</th>
             <th>Update</th>
             <th>Delete</th>
-            <th>Accept User</th>
             <th>Parking now</th>
             <th>Type_Subscription</th>
             <th>Subscription_End_Date</th>
@@ -130,8 +131,10 @@ const UsersDataTable = ({ users }) => {
             <tr key={index}>
               <td>{index + 1}</td>
               <td>{user.name}</td>
+              <td>{user.firstname}</td>
               <td>{user.email}</td>
               <td>{user.plate}</td>
+              <td>{user.requires_accessible_parking? "☒" : "☑"}</td>              
               <td>{user.blocked ? "☒" : "☑"}</td>
               <td>
                 <Button
@@ -156,28 +159,7 @@ const UsersDataTable = ({ users }) => {
                   Delete
                 </Button>
               </td>
-              <td>
-                {user.blocked && (
-                  <Button
-                    type="button"
-                    variant="success"
-                    className="mt-3"
-                    onClick={() => {
-                      setUserIdToUnblock(user._id);
-                      setUserNametoUnblock(user.name);
-                      setUserMailtoUnblock(user.email);
-                      setUserPlateToUnblock(user.plate);
-                      setUserParkingToUnblock(user.parking_id);
-                      setUsersubscriptionToUnblock(user.type_subscription);
-                      setUserEnd_dateToUnblock(user.subscription_end_date);
-                      setShowUnblockingConfirmation(true);
-                    }}
-                  >
-                    Accept
-                  </Button>
-                )}
-              </td>
-              <td>{user.parking === 0 ? "pas dans un parking" : user.parking_id}</td>
+              <td>{user.parking == 0? "pas dans un parking" : user.parking_id}</td>
               {/* Affichage sécurisé de type_subscription */}
               <td>{user.type_subscription?.name}</td>
               <td>{user.subscription_end_date}</td>
