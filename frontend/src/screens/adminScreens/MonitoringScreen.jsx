@@ -4,6 +4,50 @@ import { toast } from "react-toastify";
 import { useGetUsersAllDataMutation, useGetParkingsAllDataMutation } from "../../slices/adminApiSlice";
 import Loader from "../../components/Loader";
 
+// Fct pour calculer depuis combien de temp la voiture est arrivé.
+const calculeHeure = (heureArrivee) => {
+    if (!(heureArrivee instanceof Date) || isNaN(heureArrivee)){
+        throw new Error("L'heure d'arrivée doit être une instance Date.('heureArrivee')")
+    }
+    const maintenant = new Date();
+    const temps = maintenant - heureArrivee;
+    if (temps < 0) {
+        throw new Error("L'heure d'arrivée ne peut pas être dans le futur");
+    }
+    const heurs = parseInt(temps / (1000 * 60 * 60), 10);
+    const minutes = parseInt((temps % (1000 * 60 * 60)) / (1000 * 60), 10);
+    return `${heurs}h ${minutes}min`;
+};
+
+//fonction qui afficher un cercle de couleur en fonction de la fréquentation du parking
+const getCircleColor = (nbrPMR, nbrPlaces, select) => {
+    // Vérifie que `select` n'est pas null ou undefined
+    if (select == null) {
+        throw new Error("Le paramètre 'select' ne doit pas être null ou undefined.");
+    }
+
+    // Si aucun parking n'est sélectionné, retourne "gray"
+    if (!select) return "gray";
+
+    // Vérifie que `nbrPMR` est un nombre positif ou nul
+    if (typeof nbrPMR !== 'number' || nbrPMR < 0) {
+        throw new Error("Le paramètre 'nbrPMR' doit être un nombre positif.");
+    }
+
+    // Vérifie que `nbrPlaces` est un nombre positif et supérieur à zéro
+    if (typeof nbrPlaces !== 'number' || nbrPlaces <= 0) {
+        throw new Error("Le paramètre 'nbrPlaces' doit être un nombre positif et supérieur à zéro.");
+    }
+
+    // Calcule le pourcentage d'occupation du parking
+    const occupancyRate = (nbrPMR / nbrPlaces) * 100;
+
+    // Retourne la couleur en fonction du taux d'occupation
+    if (occupancyRate < 75) return "green";
+    if (occupancyRate >= 75 && occupancyRate <= 95) return "orange";
+    return "red";
+};
+
 const CarPlatesList = () => {
 
     // État pour stocker l'ordre de tri de nom, prénom et arrivé
@@ -68,14 +112,6 @@ const CarPlatesList = () => {
     }, [getUsersData, getParkingsData]);
 
     // Fct pour calculer depuis combien de temp la voiture est arrivé.
-    const calculeHeure = (heureArrivee) => {
-        const maintenant = new Date();
-        const temps = maintenant - heureArrivee;
-        const heurs = parseInt(temps / (1000 * 60 * 60), 10);
-        const minutes = parseInt((temps % (1000 * 60 * 60)) / (1000 * 60), 10);
-        return `${heurs}h ${minutes}min`;
-    }
-
     // Fonctions pour trier les voitures par heure arrivé, nom et prénom.
     const sortByArrivalTime = () => {
         const sortedUsers = [...usersData].sort((a, b) => {
@@ -124,6 +160,7 @@ const CarPlatesList = () => {
 
     const countPmrUsersInParking = PmrUsersInParking.length;
 
+    /*
     // couleur cercle avec calcule en pourcent
     const getCircleColor = () => {
         if (!selectedParking) return "gray"; // Par défaut si aucun parking n'est sélectionné
@@ -132,7 +169,7 @@ const CarPlatesList = () => {
         if (occupancyRate >= 75 && occupancyRate <= 95) return "orange";
         return "red";
     };
-
+*/
 
     if (!isReady) {
         return <Loader />;
@@ -170,7 +207,7 @@ const CarPlatesList = () => {
                         height: "4vw",
                         borderRadius: "50%",
                         marginLeft: "1em",
-                        backgroundColor: getCircleColor(),
+                        backgroundColor: getCircleColor(countUsersInParking, selectedParking.max_places, selectedParking  ),
                     }}
                 ></div>
             </div>
@@ -249,4 +286,6 @@ const CarPlatesList = () => {
         </div>
     );
 };
+
+export { calculeHeure, getCircleColor };
 export default CarPlatesList;
