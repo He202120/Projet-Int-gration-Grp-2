@@ -20,7 +20,7 @@ const RegisterScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [telephone, setTelephone] = useState("");
   const [plate, setPlate] = useState("");
-  const [requiresAccessibleParking, setRequiresAccessibleParking] = useState(false);
+  const [requires_accessible_parking, setRequiresAccessibleParking] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const RegisterScreen = () => {
           password,
           telephone,
           plate,
-          requiresAccessibleParking
+          requires_accessible_parking
         }).unwrap();
         // Charlier Martin
         //dispatch(setCredentials({ ...responseFromApiCall }));
@@ -140,7 +140,7 @@ const RegisterScreen = () => {
           <Form.Label>Accessible_Parking</Form.Label>
           <Form.Check
             type="checkbox"
-            checked={requiresAccessibleParking}
+            checked={requires_accessible_parking}
             onChange={(e) => setRequiresAccessibleParking(e.target.checked)}
           ></Form.Check>
         </Form.Group>

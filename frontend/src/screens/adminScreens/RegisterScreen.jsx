@@ -55,7 +55,7 @@ const AdminRegisterScreen = () => {
     }else{
 
       try{
-
+        console.log({ name, firstname, email, password, adminRegistrationKey })
         const responseFromApiCall = await register( { name, firstname, email, password, adminRegistrationKey } ).unwrap();
 
         dispatch( setCredentials( { ...responseFromApiCall } ) );

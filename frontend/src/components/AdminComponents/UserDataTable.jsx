@@ -5,8 +5,6 @@ import { useBlockUserMutation, useUnblockUserMutation, useUpdateUserByAdminMutat
 
 const UsersDataTable = ({ users }) => {
 
-  console.log("Users data:", users);
-
   const [searchQuery, setSearchQuery] = useState("");
 
   const [showBlockingConfirmation, setShowBlockingConfirmation] = useState(false);
@@ -30,6 +28,7 @@ const UsersDataTable = ({ users }) => {
   const [userParkingToUpdate, setUserParkingToUpdate] = useState("");
   const [userSubscriptionToUpdate, setUsersubscriptionToUpdate] = useState("");
   const [userEnd_dateToUpdate, setUserEnd_dateToUpdate] = useState("");
+  
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -59,7 +58,15 @@ const UsersDataTable = ({ users }) => {
 
   const handleUnblock = async () => {
     try {
-      const responseFromApiCall = await unblockUser({ userId: userIdToUnblock, name: userNameToUnblock, plate: userPlateToUnblock, email: userMailToUnblock, parking_id: userParkingToUnblock, type_subscription: userSubscriptionToUnblock, subscription_end_date: userEnd_dateToUnblock});
+      const responseFromApiCall = await unblockUser({
+        userId: userIdToUnblock,
+        name: userNameToUnblock,
+        plate: userPlateToUnblock,
+        email: userMailToUnblock,
+        parking_id: userParkingToUnblock,
+        type_subscription: userSubscriptionToUnblock,
+        subscription_end_date: userEnd_dateToUnblock
+      });
       toast.success("User Accepted Successfully.");
       setUserIdToUnblock(null);
       setShowUnblockingConfirmation(false);
@@ -86,10 +93,10 @@ const UsersDataTable = ({ users }) => {
         userId: userIdToUpdate,
         name: userNameToUpdate,
         email: userEmailToUpdate,
-        plate : userPlateToUpdate,
+        plate: userPlateToUpdate,
         parking: userParkingToUpdate,
-        subscription: userSubscriptionToUpdate,
-        end_date: userEnd_dateToUpdate,
+        type_subscription: userSubscriptionToUpdate,
+        subscription_end_date: userEnd_dateToUpdate
       });
       toast.success("User Updated Successfully.");
       setUserIdToUpdate(null);
@@ -161,7 +168,7 @@ const UsersDataTable = ({ users }) => {
                       setUserMailtoUnblock(user.email);
                       setUserPlateToUnblock(user.plate);
                       setUserParkingToUnblock(user.parking_id);
-                      setUsersubscriptionToUnblock(user.type_Subscription);
+                      setUsersubscriptionToUnblock(user.type_subscription);
                       setUserEnd_dateToUnblock(user.subscription_end_date);
                       setShowUnblockingConfirmation(true);
                     }}
@@ -171,8 +178,9 @@ const UsersDataTable = ({ users }) => {
                 )}
               </td>
               <td>{user.parking === 0 ? "pas dans un parking" : user.parking_id}</td>
-              <td>{user.subscription}</td>
-              <td>{user.end_date}</td>
+              {/* Affichage sécurisé de type_subscription */}
+              <td>{user.type_subscription?.name}</td>
+              <td>{user.subscription_end_date}</td>
             </tr>
           ))}
         </tbody>
@@ -258,7 +266,6 @@ const UsersDataTable = ({ users }) => {
                 onChange={(e) => setUserPlateToUpdate(e.target.value)}
               />
             </BootstrapForm.Group>
-
           </BootstrapForm>
         </Modal.Body>
         <Modal.Footer>

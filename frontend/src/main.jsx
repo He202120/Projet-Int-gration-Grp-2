@@ -35,6 +35,9 @@ import UsersManagementScreen from "./screens/adminScreens/UsersManagementScreen.
 import MonitoringScreen from "./screens/adminScreens/MonitoringScreen.jsx";
 import ReviewScreen from "./screens/adminScreens/ReviewScreen.jsx";
 import HandleParking from "./screens/adminScreens/HandleParkingScreen.jsx";
+import SubscriptionScreen from "./screens/adminScreens/SubscriptionScreen.jsx";
+// import ReviewScreen from "./screens/adminScreens/ReviewScreen.jsx";
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -73,6 +76,8 @@ const router = createBrowserRouter(
         <Route path="/admin/monitoring" element={<MonitoringScreen />} />
         <Route path="/admin/review" element={<ReviewScreen />} />
         <Route path="/admin/handle" element={<HandleParking />} />
+        <Route path="/admin/sub" element={<SubscriptionScreen />} />        
+
         {/* <Route path="/admin/review" element={<ReviewScreen />} /> */}
       </Route>
     </Route>
